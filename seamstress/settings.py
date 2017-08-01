@@ -60,7 +60,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
     ),
-    'PAGE_SIZE': 2
+    'PAGE_SIZE': 10
 }
 
 MIDDLEWARE = [
