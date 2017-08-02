@@ -57,20 +57,3 @@ class ProductListSerializer(serializers.ModelSerializer):
 
     def get_photos(self, obj):
         return ProductPhotoSerializer(obj.photos, many=True).data
-
-
-class ProductDetailSerializer(serializers.ModelSerializer):
-    photos = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Product
-        fields = (
-            'id',
-            'name',
-            'description',
-            'photos',
-        )
-
-    def get_photos(self, obj):
-        return ProductPhotoSerializer(obj.photos, many=True).data
-

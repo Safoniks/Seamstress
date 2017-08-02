@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
 
     'product.apps.ProductConfig',
+    'operationtype.apps.OperationtypeConfig',
 ]
 
 REST_FRAMEWORK = {

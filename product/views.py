@@ -22,17 +22,9 @@ from mixins.mixins import MultipleFieldLookupMixin
 from .models import Product, ProductPhoto
 from .serializers import (
     ProductListSerializer,
-    ProductDetailSerializer,
     ProductPhotoSerializer,
     ProductPhotoListSerializer,
 )
-
-
-@api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-        'products': reverse('product:product-list', request=request, format=format),
-    })
 
 
 class ProductList(ListCreateAPIView, CreateModelMixin):
@@ -78,7 +70,7 @@ class ProductList(ListCreateAPIView, CreateModelMixin):
 
 class ProductDetail(RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductDetailSerializer
+    serializer_class = ProductListSerializer
     lookup_url_kwarg = 'product_id'
 
     def destroy(self, request, *args, **kwargs):

@@ -19,7 +19,18 @@ from django.conf.urls import url, include
 from django.conf import settings
 from django.contrib import admin
 
-from product.views import api_root
+from rest_framework.decorators import api_view
+from rest_framework.reverse import reverse
+from rest_framework.response import Response
+
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'products': reverse('product:product-list', request=request, format=format),
+        'operation-types': reverse('operation-type:operation-type-list', request=request, format=format),
+    })
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -28,6 +39,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     url(r'^api/product/', include('product.urls', namespace='product')),
+    url(r'^api/operation-type/', include('operationtype.urls', namespace='operation-type')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
