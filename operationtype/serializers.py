@@ -4,12 +4,12 @@ from .models import OperationType
 
 
 class OperationTypeSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name="operation-type:operation-type-detail")
+    # url = serializers.HyperlinkedIdentityField(view_name="operation-type:operation-type-detail")
 
     class Meta:
         model = OperationType
         fields = (
-            'url',
+            # 'url',
             'id',
             'name',
             'duration',

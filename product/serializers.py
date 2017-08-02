@@ -42,18 +42,19 @@ class ProductPhotoSerializer(serializers.ModelSerializer):
 
 
 class ProductListSerializer(serializers.ModelSerializer):
-    url = serializers.HyperlinkedIdentityField(view_name="product:product-detail", lookup_url_kwarg='product_id')
-    photos = serializers.SerializerMethodField()
+    # url = serializers.HyperlinkedIdentityField(view_name="product:product-detail", lookup_url_kwarg='product_id')
+    # photos = serializers.SerializerMethodField()
+    photos = ProductPhotoSerializer(many=True)
 
     class Meta:
         model = Product
         fields = (
-            'url',
+            # 'url',
             'id',
             'name',
             'description',
             'photos',
         )
 
-    def get_photos(self, obj):
-        return ProductPhotoSerializer(obj.photos, many=True).data
+    # def get_photos(self, obj):
+    #     return ProductPhotoSerializer(obj.photos, many=True).data

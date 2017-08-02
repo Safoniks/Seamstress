@@ -27,7 +27,7 @@ from .serializers import (
 )
 
 
-class ProductList(ListCreateAPIView, CreateModelMixin):
+class ProductList(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductListSerializer
 

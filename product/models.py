@@ -8,13 +8,14 @@ def get_image_path(instance, filename):
 
 
 class ProductPhoto(models.Model):
-    product = models.ForeignKey('Product', related_name='product_photos')
+    product = models.ForeignKey('product.Product', related_name='product_photos')
     photo = models.ImageField(upload_to=get_image_path, null=True, blank=True)
 
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, default='')
+    operations = models.ManyToManyField('operationtype.OperationType', through='operation.Operation')
 
     def __str__(self):
         return self.name
