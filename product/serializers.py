@@ -19,6 +19,7 @@ class ProductPhotosCreateSerializer(serializers.Serializer):
         return attrs
 
     def create(self, validated_data):
+        photo = None
         photos = validated_data.pop('photo')
         product = validated_data.pop('product')
         for img in photos:
@@ -31,9 +32,12 @@ class ProductPhotosCreateSerializer(serializers.Serializer):
 
 
 class ProductPhotoSerializer(serializers.ModelSerializer):
+    # url = serializers.HyperlinkedIdentityField(view_name="product:product-photo-detail", lookup_url_kwarg='photo_id')
+
     class Meta:
         model = ProductPhoto
         fields = (
+            # 'url',
             'id',
             'photo',
         )
@@ -41,7 +45,6 @@ class ProductPhotoSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     # url = serializers.HyperlinkedIdentityField(view_name="product:product-detail", lookup_url_kwarg='product_id')
-    # photos = serializers.SerializerMethodField()
     photos = ProductPhotoSerializer(many=True, read_only=True)
 
     class Meta:
@@ -53,6 +56,3 @@ class ProductSerializer(serializers.ModelSerializer):
             'description',
             'photos',
         )
-
-    # def get_photos(self, obj):
-    #     return ProductPhotoSerializer(obj.photos, many=True).data

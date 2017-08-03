@@ -20,3 +20,13 @@ class ProductOperationListSerializer(serializers.ModelSerializer):
 
     def get_type(self, obj):
         return OperationTypeSerializer(obj.operation_type).data
+
+    def validate_operation_type(self, value):
+        view = self.context['view']
+        product_id = view.kwargs.get('product_id')
+        type_id = value.id
+
+        operation = Operation.objects.filter(product_id=product_id, operation_type_id=type_id)
+        if operation:
+            raise serializers.ValidationError('Already exist.')
+        return value
