@@ -13,4 +13,3 @@ class OperationType(models.Model):
     def save(self, *args, **kwargs):
         self.full_cost = self.cost_per_second * self.duration
         super(OperationType, self).save(*args, **kwargs)
-

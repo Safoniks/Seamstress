@@ -17,5 +17,3 @@ class OperationTypeSerializer(serializers.ModelSerializer):
             'full_cost',
         )
         read_only_fields = ('full_cost',)
-
-

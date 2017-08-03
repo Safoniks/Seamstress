@@ -6,6 +6,4 @@ from operation import views
 urlpatterns = format_suffix_patterns([
     url(r'^$', views.ProductOperationList.as_view(), name='operation-list'),
     url(r'^(?P<operation_id>\d+)/$', views.ProductOperationDetail.as_view(), name='operation-detail'),
-    # url(r'^(?P<product_id>\d+)/photo/$', views.ProductPhotoList.as_view(), name='product-photo-list'),
-    # url(r'^(?P<product_id>\d+)/photo/(?P<pk>\d+)$', views.ProductPhotoDetail.as_view(), name='product-photo-detail'),
 ])

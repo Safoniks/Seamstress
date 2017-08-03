@@ -29,6 +29,8 @@ def api_root(request, format=None):
     return Response({
         'products': reverse('product:product-list', request=request, format=format),
         'operation-types': reverse('operation-type:operation-type-list', request=request, format=format),
+        'register-admin': reverse('register:admin', request=request, format=format),
+        'register-worker': reverse('register:worker', request=request, format=format),
     })
 
 
@@ -37,6 +39,8 @@ urlpatterns = [
 
     url(r'^api/$', api_root),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    url(r'^api/register/', include('user.urls', namespace='register')),
 
     url(r'^api/product/', include('product.urls', namespace='product')),
     url(r'^api/operation-type/', include('operationtype.urls', namespace='operation-type')),
