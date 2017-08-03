@@ -1,10 +1,11 @@
 import os
 from django.db import models
+from django.conf import settings
 
 
 def get_image_path(instance, filename):
     # product_dir = '{id}-{name}'.format(id=instance.product.id, name=instance.product.name)
-    return os.path.join('product-photos', str(instance.product.id), filename)
+    return os.path.join(settings.PRODUCT_PHOTOS_DIR_NAME, str(instance.product.id), filename)
 
 
 class ProductPhoto(models.Model):

@@ -21,37 +21,32 @@ from mixins.mixins import MultipleFieldLookupMixin
 
 from .models import Product, ProductPhoto
 from .serializers import (
-    ProductListSerializer,
+    ProductSerializer,
     ProductPhotoSerializer,
-    ProductPhotoListSerializer,
+    ProductPhotosCreateSerializer,
 )
 
 
 class ProductList(ListCreateAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductListSerializer
+    serializer_class = ProductSerializer
 
     def create(self, request, *args, **kwargs):
         data = request.data
-        name = data['name']
-        description = data['description']
-        photos = dict(request.FILES).get('photo')
-        serializer_context = {
-            'request': request,
-        }
-        new_product = {
-            'name': name,
-            'description': description
-        }
-
-        product_serializer = ProductListSerializer(data=new_product, context=serializer_context)
+        photos = dict(request.FILES).get('photo', None)
+        ######### for urlfield needed
+        # serializer_context = {
+        #     'request': request,
+        # }
+        # product_serializer = ProductSerializer(data=new_product, context=serializer_context)
+        product_serializer = ProductSerializer(data=data)
 
         if product_serializer.is_valid():
             product_serializer.save()
             product = product_serializer.data
 
             if photos:
-                photos_serializer = ProductPhotoListSerializer(data={
+                photos_serializer = ProductPhotosCreateSerializer(data={
                     'photo': photos,
                     'product_id': product['id']
                 })
@@ -70,12 +65,12 @@ class ProductList(ListCreateAPIView):
 
 class ProductDetail(RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductListSerializer
+    serializer_class = ProductSerializer
     lookup_url_kwarg = 'product_id'
 
     def destroy(self, request, *args, **kwargs):
         product_id = self.kwargs.get(self.lookup_url_kwarg)
-        product_photo_dir = os.path.join(settings.MEDIA_ROOT, 'product-photos', str(product_id))
+        product_photo_dir = os.path.join(settings.MEDIA_ROOT, settings.PRODUCT_PHOTOS_DIR_NAME, str(product_id))
         try:
             shutil.rmtree(product_photo_dir)
         except OSError:
@@ -91,7 +86,7 @@ class ProductPhotoList(ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         product_id = self.kwargs.get(self.lookup_url_kwarg)
         photos = dict(request.FILES).get('photo')
-        photos_serializer = ProductPhotoListSerializer(data={
+        photos_serializer = ProductPhotosCreateSerializer(data={
             'photo': photos,
             'product_id': product_id
         })
@@ -104,9 +99,6 @@ class ProductPhotoList(ListCreateAPIView):
         queryset_list = ProductPhoto.objects.filter(product=self.product)
         return queryset_list
 
-    def perform_create(self, serializer):
-        serializer.save(product=self.product)
-
     @property
     def product(self):
         product_id = self.kwargs.get(self.lookup_url_kwarg)
@@ -117,10 +109,11 @@ class ProductPhotoList(ListCreateAPIView):
 class ProductPhotoDetail(RetrieveDestroyAPIView):
     queryset = ProductPhoto.objects.all()
     serializer_class = ProductPhotoSerializer
+    lookup_url_kwarg = 'photo_id'
 
     def destroy(self, request, *args, **kwargs):
         product_id = self.kwargs.get('product_id')
-        photo_id = self.kwargs.get('pk')
+        photo_id = self.kwargs.get('photo_id')
         try:
             photo = ProductPhoto.objects.filter(product__id=product_id).get(id=photo_id)
         except ObjectDoesNotExist:

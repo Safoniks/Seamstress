@@ -15,5 +15,5 @@ operation_type_detail = OperationTypeViewSet.as_view({
 
 urlpatterns = format_suffix_patterns([
     url(r'^$', operation_type_list, name='operation-type-list'),
-    url(r'^(?P<pk>\d+)/$', operation_type_detail, name='operation-type-detail')
+    url(r'^(?P<operation_type_id>\d+)/$', operation_type_detail, name='operation-type-detail')
 ])
