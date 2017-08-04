@@ -12,15 +12,27 @@ from rest_framework.decorators import api_view
 from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.generics import (
-    ListAPIView
+    ListAPIView,
+    RetrieveUpdateDestroyAPIView,
 )
 
 from .models import Worker
 from .serializers import (
-    WorkerSerializer,
+    WorkerListSerializer,
 )
 
 
 class WorkerList(ListAPIView):
     queryset = Worker.objects.all()
-    serializer_class = WorkerSerializer
+    serializer_class = WorkerListSerializer
+
+
+class WorkerDetail(RetrieveUpdateDestroyAPIView):
+    queryset = Worker.objects.all()
+    serializer_class = WorkerListSerializer
+    lookup_url_kwarg = 'worker_id'
+
+    # def get_serializer_class(self):
+    #     if self.request.method == 'PUT':
+    #         return WorkerUpdateSerializer
+    #     return WorkerListSerializer

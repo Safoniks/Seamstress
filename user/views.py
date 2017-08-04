@@ -1,9 +1,9 @@
 from rest_framework.generics import CreateAPIView
 
 from .models import MyUser
-from .serializers import UserSerializer
+from .serializers import UserCreateSerializer
 
 
 class UserCreate(CreateAPIView):
     queryset = MyUser.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserCreateSerializer
