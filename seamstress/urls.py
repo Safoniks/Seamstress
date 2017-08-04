@@ -31,6 +31,8 @@ def api_root(request, format=None):
         'operation-types': reverse('operation-type:operation-type-list', request=request, format=format),
         'register-admin': reverse('register:admin', request=request, format=format),
         'register-worker': reverse('register:worker', request=request, format=format),
+        'workers': reverse('worker:worker-list', request=request, format=format),
+        'brigades': reverse('brigade:brigade-list', request=request, format=format),
     })
 
 
@@ -44,6 +46,8 @@ urlpatterns = [
 
     url(r'^api/product/', include('product.urls', namespace='product')),
     url(r'^api/operation-type/', include('operationtype.urls', namespace='operation-type')),
+    url(r'^api/worker/', include('worker.urls', namespace='worker')),
+    url(r'^api/brigade/', include('brigade.urls', namespace='brigade')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

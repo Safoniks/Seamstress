@@ -5,4 +5,4 @@ class UserConfig(AppConfig):
     name = 'user'
 
     def ready(self):
-        import user.signals.create_worker
+        import user.signals.worker_signals
