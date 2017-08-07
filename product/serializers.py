@@ -55,4 +55,5 @@ class ProductSerializer(serializers.ModelSerializer):
             'name',
             'description',
             'photos',
+            'workers',
         )

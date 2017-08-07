@@ -23,6 +23,8 @@ from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
+from worker.views import WorkerOperationCreate
+
 
 @api_view(['GET'])
 def api_root(request, format=None):
@@ -33,8 +35,18 @@ def api_root(request, format=None):
         'register-worker': reverse('register:worker', request=request, format=format),
         'workers': reverse('worker:worker-list', request=request, format=format),
         'brigades': reverse('brigade:brigade-list', request=request, format=format),
+        'set-worker-operation': reverse('create-worker-operation', request=request, format=format),
     })
 
+
+core_urlpatterns = [
+    url(r'^product/', include('product.urls', namespace='product')),
+    url(r'^operation-type/', include('operationtype.urls', namespace='operation-type')),
+    url(r'^worker/', include('worker.urls', namespace='worker')),
+    url(r'^brigade/', include('brigade.urls', namespace='brigade')),
+
+    url(r'^set-worker-operation/$', WorkerOperationCreate.as_view(), name='create-worker-operation'),
+]
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -42,12 +54,9 @@ urlpatterns = [
     url(r'^api/$', api_root),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
-    url(r'^api/register/', include('user.urls', namespace='register')),
+    url(r'^api/core/', include(core_urlpatterns)),
 
-    url(r'^api/product/', include('product.urls', namespace='product')),
-    url(r'^api/operation-type/', include('operationtype.urls', namespace='operation-type')),
-    url(r'^api/worker/', include('worker.urls', namespace='worker')),
-    url(r'^api/brigade/', include('brigade.urls', namespace='brigade')),
+    url(r'^api/register/', include('user.urls', namespace='register')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

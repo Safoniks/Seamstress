@@ -11,3 +11,6 @@ class Worker(models.Model):
     user = models.OneToOneField('user.MyUser')
     brigade = models.ForeignKey('brigade.Brigade', null=True, blank=True, on_delete=models.SET_NULL)
     worker_operations = models.ManyToManyField('operation.Operation', through='worker.WorkerOperation')
+
+    def __str__(self):
+        return self.user.username
