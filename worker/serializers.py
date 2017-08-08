@@ -80,6 +80,14 @@ class WorkerUpdateSerializer(serializers.ModelSerializer):
             'brigade',
         )
 
+    def update(self, instance, validated_data):
+        first_name = validated_data.get('first_name')
+        last_name = validated_data.get('last_name')
+        instance.user.first_name = first_name
+        instance.user.last_name = last_name
+        instance.user.save()
+        return super(WorkerUpdateSerializer, self).update(instance, validated_data)
+
 
 class WorkerProfileSerializer(serializers.ModelSerializer):
     first_name = serializers.SerializerMethodField()

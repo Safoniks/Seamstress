@@ -36,6 +36,9 @@ def api_root(request, format=None):
         'workers': reverse('worker:worker-list', request=request, format=format),
         'brigades': reverse('brigade:brigade-list', request=request, format=format),
         'set-worker-operation': reverse('create-worker-operation', request=request, format=format),
+
+        'public-worker': reverse('public:worker-detail', request=request, format=format),
+        'public-worker-operations': reverse('public:operation-list', request=request, format=format),
     })
 
 
@@ -55,6 +58,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     url(r'^api/core/', include(core_urlpatterns)),
+    url(r'^api/public/', include('public.urls', namespace='public')),
 
     url(r'^api/register/', include('user.urls', namespace='register')),
 ]

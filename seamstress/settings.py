@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'worker.apps.WorkerConfig',
     'user.apps.UserConfig',
     'brigade.apps.BrigadeConfig',
+    'public.apps.PublicConfig'
 ]
 
 REST_FRAMEWORK = {

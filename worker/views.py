@@ -40,19 +40,9 @@ class WorkerDetail(RetrieveUpdateDestroyAPIView):
     def update(self, request, *args, **kwargs):
         data = request.data
         worker = self.worker
-        worker_serializer = WorkerUpdateSerializer(data=data)
+        worker_serializer = WorkerUpdateSerializer(worker, data=data)
         if worker_serializer.is_valid():
-            data = worker_serializer.initial_data
-            brigade_id = data.get('brigade')
-            first_name = data.get('first_name')
-            last_name = data.get('last_name')
-
-            worker.brigade = get_object_or_404(Brigade, id=brigade_id)
-            worker.save()
-            worker.user.first_name = first_name
-            worker.user.last_name = last_name
-            worker.user.save()
-
+            worker_serializer.save()
             response_data = WorkerListSerializer(worker).data
             return Response(response_data, status=HTTP_200_OK)
         return Response(worker_serializer.errors, status=HTTP_400_BAD_REQUEST)
