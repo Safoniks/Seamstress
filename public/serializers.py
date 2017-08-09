@@ -53,7 +53,7 @@ class PublicWorkerDetailSerializer(serializers.ModelSerializer):
             'daily_salary',
             'goal',
             'brigade',
-            'is_active',
+            'is_working',
         )
 
     def get_first_name(self, obj):

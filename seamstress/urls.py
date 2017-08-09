@@ -39,6 +39,8 @@ def api_root(request, format=None):
 
         'public-worker': reverse('public:worker-detail', request=request, format=format),
         'public-worker-operations': reverse('public:operation-list', request=request, format=format),
+        'start-working': reverse('public:start-working', request=request, format=format),
+        'stop-working': reverse('public:stop-working', request=request, format=format),
     })
 
 

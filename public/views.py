@@ -3,6 +3,7 @@ from django.http import Http404
 
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.views import APIView
 from rest_framework.generics import (
     ListAPIView,
     RetrieveAPIView,
@@ -70,7 +71,7 @@ class PublicOperationDone(CreateAPIView):
         if done_serializer.is_valid():
             amount = done_serializer.data.get('amount')
             worker_operation = get_object_or_404(WorkerOperation, worker=self.worker, operation=self.get_object())
-            worker_operation.increase_done(amount)
+            worker_operation.operation_done(amount)
 
             operation_response = PublicOperationListSerializer(self.get_object(), context={'request': request}).data
             return Response(operation_response, status=HTTP_200_OK)
@@ -107,3 +108,33 @@ class PublicWorkerDetail(GenericAPIView):
             response_data = PublicWorkerDetailSerializer(worker).data
             return Response(response_data, status=HTTP_200_OK)
         return Response(worker_serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
+class StartWorking(APIView):
+    permission_classes = [IsAuthenticatedWorker]
+
+    def post(self, request, *args, **kwargs):
+        worker = self.worker
+        if not worker.is_working:
+            worker.start_working()
+            return Response(status=HTTP_200_OK)
+        return Response(data={'error': 'Is working now.'}, status=HTTP_400_BAD_REQUEST)
+
+    @property
+    def worker(self):
+        return self.request.user.worker
+
+
+class StopWorking(APIView):
+    permission_classes = [IsAuthenticatedWorker]
+
+    def post(self, request, *args, **kwargs):
+        worker = self.worker
+        if worker.is_working:
+            worker.stop_working()
+            return Response(status=HTTP_200_OK)
+        return Response(data={'error': 'Does not working now.'}, status=HTTP_400_BAD_REQUEST)
+
+    @property
+    def worker(self):
+        return self.request.user.worker
