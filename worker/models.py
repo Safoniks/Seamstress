@@ -1,3 +1,6 @@
+from datetime import timedelta
+
+from django.utils import timezone
 from django.db import models
 
 from public.models import WorkerOperationLogs, WorkerTiming
@@ -42,15 +45,56 @@ class Worker(models.Model):
     daily_salary = models.FloatField(blank=True, default=0)
     monthly_salary = models.FloatField(blank=True, default=0)
     is_working = models.BooleanField(blank=True, default=False)
+    time_worked = models.DurationField(blank=True, default=timedelta())
+    last_reset = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.user.username
 
-    def get_last_timing(self):
-        timing = WorkerTiming.objects.filter(worker=self).last()
-        return timing
+    @property
+    def brigade_name(self):
+        brigade = self.brigade
+        if brigade:
+            return brigade.name
+        return None
 
-    def start_working(self):
+    @property
+    def timings(self):
+        timings = WorkerTiming.objects.filter(worker=self)
+        return timings
+
+    def get_last_timing(self):
+        return self.timings.last()
+
+    def get_newest_timings(self):
+        return self.timings.filter(date__gt=self.last_reset)
+
+    def refresh_time_worked(self):
+        time_worked = timedelta()
+        timings = self.get_newest_timings()
+        stop_timings = timings.filter(start=False)
+        start_timings = timings.filter(start=True)
+        start_timer = start_timings.first()
+
+        if timings.exists() and start_timer:
+            if self.is_working:
+                current_time = timezone.now()
+                start_timings = start_timings[1:]
+
+                time_worked = current_time - start_timer.date
+                if start_timings.exists():
+                    for start_timing in start_timings:
+                        time_worked -= start_timing.delta
+
+            else:
+                if stop_timings.exists():
+                    for stop_timing in stop_timings:
+                        time_worked += stop_timing.delta
+
+            self.time_worked = time_worked
+            self.save()
+
+    def start_timer(self):
         worker_timing = WorkerTiming(
             worker=self,
             start=True
@@ -60,7 +104,7 @@ class Worker(models.Model):
         worker_timing.save()
         self.save()
 
-    def stop_working(self):
+    def stop_timer(self):
         worker_timing = WorkerTiming(
             worker=self,
             start=False
@@ -68,4 +112,9 @@ class Worker(models.Model):
         self.is_working = False
 
         worker_timing.save()
+        self.save()
+
+    def reset_timer(self):
+        self.time_worked = timedelta()
+        self.last_reset = timezone.now()
         self.save()

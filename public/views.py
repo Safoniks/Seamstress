@@ -19,6 +19,7 @@ from .serializers import (
     PublicOperationDoneSerializer,
     PublicWorkerDetailSerializer,
     PublicWorkerUpdateSerializer,
+    TimerDetailSerializer,
 )
 from .permissions import IsAuthenticatedWorker
 
@@ -110,13 +111,32 @@ class PublicWorkerDetail(GenericAPIView):
         return Response(worker_serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
-class StartWorking(APIView):
+class TimerDetail(GenericAPIView):
+    serializer_class = TimerDetailSerializer
+    permission_classes = [IsAuthenticatedWorker]
+
+    def get_object(self):
+        try:
+            return self.request.user.worker
+        except AttributeError:
+            raise Http404
+
+    def get(self, request, *args, **kwargs):
+        worker = self.get_object()
+        serializer = self.serializer_class
+
+        worker.refresh_time_worked()
+        timer_serializer = serializer(worker).data
+        return Response(timer_serializer, status=HTTP_200_OK)
+
+
+class StartTimer(APIView):
     permission_classes = [IsAuthenticatedWorker]
 
     def post(self, request, *args, **kwargs):
         worker = self.worker
         if not worker.is_working:
-            worker.start_working()
+            worker.start_timer()
             return Response(status=HTTP_200_OK)
         return Response(data={'error': 'Is working now.'}, status=HTTP_400_BAD_REQUEST)
 
@@ -125,15 +145,30 @@ class StartWorking(APIView):
         return self.request.user.worker
 
 
-class StopWorking(APIView):
+class StopTimer(APIView):
     permission_classes = [IsAuthenticatedWorker]
 
     def post(self, request, *args, **kwargs):
         worker = self.worker
         if worker.is_working:
-            worker.stop_working()
+            worker.stop_timer()
             return Response(status=HTTP_200_OK)
         return Response(data={'error': 'Does not working now.'}, status=HTTP_400_BAD_REQUEST)
+
+    @property
+    def worker(self):
+        return self.request.user.worker
+
+
+class ResetTimer(APIView):
+    permission_classes = [IsAuthenticatedWorker]
+
+    def post(self, request, *args, **kwargs):
+        worker = self.worker
+        if not worker.is_working:
+            worker.reset_timer()
+            return Response(status=HTTP_200_OK)
+        return Response(data={'error': 'Is working now.'}, status=HTTP_400_BAD_REQUEST)
 
     @property
     def worker(self):

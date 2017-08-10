@@ -29,18 +29,23 @@ from worker.views import WorkerOperationCreate
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'products': reverse('product:product-list', request=request, format=format),
-        'operation-types': reverse('operation-type:operation-type-list', request=request, format=format),
         'register-admin': reverse('register:admin', request=request, format=format),
         'register-worker': reverse('register:worker', request=request, format=format),
+
+        'products': reverse('product:product-list', request=request, format=format),
+        'operation-types': reverse('operation-type:operation-type-list', request=request, format=format),
         'workers': reverse('worker:worker-list', request=request, format=format),
         'brigades': reverse('brigade:brigade-list', request=request, format=format),
+
         'set-worker-operation': reverse('create-worker-operation', request=request, format=format),
 
         'public-worker': reverse('public:worker-detail', request=request, format=format),
         'public-worker-operations': reverse('public:operation-list', request=request, format=format),
-        'start-working': reverse('public:start-working', request=request, format=format),
-        'stop-working': reverse('public:stop-working', request=request, format=format),
+
+        'timer': reverse('public:timer-detail', request=request, format=format),
+        'start-timer': reverse('public:start-timer', request=request, format=format),
+        'stop-timer': reverse('public:stop-timer', request=request, format=format),
+        'reset-timer': reverse('public:reset-timer', request=request, format=format),
     })
 
 
@@ -51,6 +56,8 @@ core_urlpatterns = [
     url(r'^brigade/', include('brigade.urls', namespace='brigade')),
 
     url(r'^set-worker-operation/$', WorkerOperationCreate.as_view(), name='create-worker-operation'),
+
+    url(r'^register/', include('user.urls', namespace='register')),
 ]
 
 urlpatterns = [
@@ -61,8 +68,6 @@ urlpatterns = [
 
     url(r'^api/core/', include(core_urlpatterns)),
     url(r'^api/public/', include('public.urls', namespace='public')),
-
-    url(r'^api/register/', include('user.urls', namespace='register')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

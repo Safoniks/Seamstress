@@ -15,7 +15,7 @@ class WorkerTiming(models.Model):
     worker = models.ForeignKey('worker.Worker')
     start = models.BooleanField()
     delta = models.DurationField(null=True, blank=True)
-    date = models.DateTimeField()
+    date = models.DateTimeField(blank=True)
 
     class Meta:
         ordering = ['date']

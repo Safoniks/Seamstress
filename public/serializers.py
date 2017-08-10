@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from rest_framework import serializers
 
 from operation.models import Operation
@@ -63,7 +65,7 @@ class PublicWorkerDetailSerializer(serializers.ModelSerializer):
         return obj.user.last_name
 
     def get_brigade(self, obj):
-        return obj.brigade.name
+        return obj.brigade_name
 
 
 class PublicWorkerUpdateSerializer(serializers.ModelSerializer):
@@ -85,3 +87,28 @@ class PublicWorkerUpdateSerializer(serializers.ModelSerializer):
         instance.user.last_name = last_name
         instance.user.save()
         return super(PublicWorkerUpdateSerializer, self).update(instance, validated_data)
+
+
+class MyDateTimeField(serializers.DateTimeField):
+    format = '%Y-%m-%d %H:%M:%S'
+
+    def to_representation(self, value):
+        value = timezone.localtime(value)
+        return super(MyDateTimeField, self).to_representation(value)
+
+
+class TimerDetailSerializer(serializers.ModelSerializer):
+    last_reset = MyDateTimeField()
+
+    class Meta:
+        model = Worker
+        fields = (
+            'is_working',
+            'time_worked',
+            'last_reset',
+        )
+        read_only_fields = (
+            'is_working',
+            'time_worked',
+            'last_reset',
+        )
