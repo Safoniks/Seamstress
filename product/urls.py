@@ -10,4 +10,4 @@ urlpatterns = format_suffix_patterns([
     url(r'^(?P<product_id>\d+)/photo/(?P<photo_id>\d+)$', views.ProductPhotoDetail.as_view(), name='product-photo-detail'),
 ])
 
-urlpatterns += [url(r'^(?P<product_id>\d+)/operation/', include('operation.urls', namespace='operation')), ]
+urlpatterns += [url(r'^(?P<product_id>\d+)/operation/', include('operation.urls')), ]

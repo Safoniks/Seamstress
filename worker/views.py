@@ -10,7 +10,6 @@ from rest_framework.generics import (
 )
 
 from operation.models import Operation
-from brigade.models import Brigade
 
 from .models import Worker, WorkerOperation
 from .serializers import (
@@ -92,6 +91,6 @@ class WorkerOperationDetail(RetrieveDestroyAPIView):
 
     @property
     def worker(self):
-        worker_id = self.kwargs.get(self.lookup_url_kwarg)
+        worker_id = self.kwargs.get('worker_id')
         worker = get_object_or_404(Worker, id=worker_id)
         return worker

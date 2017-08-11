@@ -94,22 +94,12 @@ class Worker(models.Model):
             self.time_worked = time_worked
             self.save()
 
-    def start_timer(self):
+    def start_stop_timer(self, is_start):
         worker_timing = WorkerTiming(
             worker=self,
-            start=True
+            start=is_start
         )
-        self.is_working = True
-
-        worker_timing.save()
-        self.save()
-
-    def stop_timer(self):
-        worker_timing = WorkerTiming(
-            worker=self,
-            start=False
-        )
-        self.is_working = False
+        self.is_working = is_start
 
         worker_timing.save()
         self.save()

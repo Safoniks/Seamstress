@@ -24,20 +24,23 @@ from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
 from worker.views import WorkerOperationCreate
+from rest_framework_jwt.views import obtain_jwt_token
 
 
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'register-admin': reverse('register:admin', request=request, format=format),
-        'register-worker': reverse('register:worker', request=request, format=format),
+        'register-admin': reverse('core:register-admin', request=request, format=format),
+        'register-worker': reverse('core:register-worker', request=request, format=format),
+        'login-admin': reverse('core:login-admin', request=request, format=format),
+        'login-worker': reverse('public:login-worker', request=request, format=format),
 
-        'products': reverse('product:product-list', request=request, format=format),
-        'operation-types': reverse('operation-type:operation-type-list', request=request, format=format),
-        'workers': reverse('worker:worker-list', request=request, format=format),
-        'brigades': reverse('brigade:brigade-list', request=request, format=format),
+        'products': reverse('core:product-list', request=request, format=format),
+        'operation-types': reverse('core:operation-type-list', request=request, format=format),
+        'workers': reverse('core:worker-list', request=request, format=format),
+        'brigades': reverse('core:brigade-list', request=request, format=format),
 
-        'set-worker-operation': reverse('create-worker-operation', request=request, format=format),
+        'set-worker-operation': reverse('core:create-worker-operation', request=request, format=format),
 
         'public-worker': reverse('public:worker-detail', request=request, format=format),
         'public-worker-operations': reverse('public:operation-list', request=request, format=format),
@@ -50,14 +53,15 @@ def api_root(request, format=None):
 
 
 core_urlpatterns = [
-    url(r'^product/', include('product.urls', namespace='product')),
-    url(r'^operation-type/', include('operationtype.urls', namespace='operation-type')),
-    url(r'^worker/', include('worker.urls', namespace='worker')),
-    url(r'^brigade/', include('brigade.urls', namespace='brigade')),
+    url(r'^product/', include('product.urls')),
+    url(r'^operation-type/', include('operationtype.urls')),
+    url(r'^worker/', include('worker.urls')),
+    url(r'^brigade/', include('brigade.urls')),
 
     url(r'^set-worker-operation/$', WorkerOperationCreate.as_view(), name='create-worker-operation'),
 
-    url(r'^register/', include('user.urls', namespace='register')),
+    url(r'^register/', include('user.urls')),
+    url(r'^login/$', obtain_jwt_token, name='login-admin'),
 ]
 
 urlpatterns = [
@@ -66,7 +70,7 @@ urlpatterns = [
     url(r'^api/$', api_root),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
-    url(r'^api/core/', include(core_urlpatterns)),
+    url(r'^api/core/', include(core_urlpatterns, namespace='core')),
     url(r'^api/public/', include('public.urls', namespace='public')),
 ]
 

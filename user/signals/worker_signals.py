@@ -1,11 +1,11 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from django.contrib.auth.models import User
 
 from worker.models import Worker
+from user.models import MyUser
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=MyUser)
 def create_worker(sender, instance, created, **kwargs):
     if created and not instance.is_superuser and not instance.is_staff:
         new_worker = Worker(user=instance)
@@ -14,5 +14,5 @@ def create_worker(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Worker)
 def delete_worker(sender, instance, **kwargs):
-    if instance.user:
+    if hasattr(instance, 'user'):
         instance.user.delete()

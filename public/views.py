@@ -12,7 +12,7 @@ from rest_framework.generics import (
 )
 
 from operation.models import Operation
-from worker.models import WorkerOperation, Worker
+from worker.models import WorkerOperation
 
 from .serializers import (
     PublicOperationListSerializer,
@@ -23,63 +23,11 @@ from .serializers import (
 )
 from .permissions import IsAuthenticatedWorker
 
-
-class PublicOperationList(ListAPIView):
-    serializer_class = PublicOperationListSerializer
-    permission_classes = [IsAuthenticatedWorker]
-
-    def get_queryset(self):
-        queryset_list = Operation.objects.filter(worker=self.worker)
-        return queryset_list
-
-    @property
-    def worker(self):
-        return self.request.user.worker
-
-
-class PublicOperationDetail(RetrieveAPIView):
-    serializer_class = PublicOperationListSerializer
-    permission_classes = [IsAuthenticatedWorker]
-    lookup_url_kwarg = 'operation_id'
-
-    def get_object(self):
-        operation_id = self.kwargs.get(self.lookup_url_kwarg)
-        operation_obj = Operation.objects.get(worker=self.worker, id=operation_id)
-        return operation_obj
-
-    @property
-    def worker(self):
-        return self.request.user.worker
-
-
-class PublicOperationDone(CreateAPIView):
-    serializer_class = PublicOperationDoneSerializer
-    permission_classes = [IsAuthenticatedWorker]
-    lookup_url_kwarg = 'operation_id'
-
-    def get_object(self):
-        operation_id = self.kwargs.get(self.lookup_url_kwarg)
-        operation_obj = Operation.objects.get(worker=self.worker, id=operation_id)
-        return operation_obj
-
-    @property
-    def worker(self):
-        return self.request.user.worker
-
-    def create(self, request, *args, **kwargs):
-        data = request.data
-        done_serializer = PublicOperationDoneSerializer(data=data)
-        if done_serializer.is_valid():
-            amount = done_serializer.data.get('amount')
-            worker_operation = get_object_or_404(WorkerOperation, worker=self.worker, operation=self.get_object())
-            worker_operation.operation_done(amount)
-
-            operation_response = PublicOperationListSerializer(self.get_object(), context={'request': request}).data
-            return Response(operation_response, status=HTTP_200_OK)
-        return Response(done_serializer.errors, status=HTTP_400_BAD_REQUEST)
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 
 class PublicWorkerDetail(GenericAPIView):
+    # authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = [IsAuthenticatedWorker]
 
     def get_object(self):
@@ -111,7 +59,66 @@ class PublicWorkerDetail(GenericAPIView):
         return Response(worker_serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
+class PublicOperationList(ListAPIView):
+    # authentication_classes = (JSONWebTokenAuthentication,)
+    serializer_class = PublicOperationListSerializer
+    permission_classes = [IsAuthenticatedWorker]
+
+    def get_queryset(self):
+        queryset_list = Operation.objects.filter(worker=self.worker)
+        return queryset_list
+
+    @property
+    def worker(self):
+        return self.request.user.worker
+
+
+class PublicOperationDetail(RetrieveAPIView):
+    # authentication_classes = (JSONWebTokenAuthentication,)
+    serializer_class = PublicOperationListSerializer
+    permission_classes = [IsAuthenticatedWorker]
+    lookup_url_kwarg = 'operation_id'
+
+    def get_object(self):
+        operation_id = self.kwargs.get(self.lookup_url_kwarg)
+        operation_obj = Operation.objects.get(worker=self.worker, id=operation_id)
+        return operation_obj
+
+    @property
+    def worker(self):
+        return self.request.user.worker
+
+
+class PublicOperationDone(CreateAPIView):
+    # authentication_classes = (JSONWebTokenAuthentication,)
+    serializer_class = PublicOperationDoneSerializer
+    permission_classes = [IsAuthenticatedWorker]
+    lookup_url_kwarg = 'operation_id'
+
+    def get_object(self):
+        operation_id = self.kwargs.get(self.lookup_url_kwarg)
+        operation_obj = Operation.objects.get(worker=self.worker, id=operation_id)
+        return operation_obj
+
+    @property
+    def worker(self):
+        return self.request.user.worker
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        done_serializer = PublicOperationDoneSerializer(data=data)
+        if done_serializer.is_valid():
+            amount = done_serializer.data.get('amount')
+            worker_operation = get_object_or_404(WorkerOperation, worker=self.worker, operation=self.get_object())
+            worker_operation.operation_done(amount)
+
+            operation_response = PublicOperationListSerializer(self.get_object(), context={'request': request}).data
+            return Response(operation_response, status=HTTP_200_OK)
+        return Response(done_serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+
 class TimerDetail(GenericAPIView):
+    # authentication_classes = (JSONWebTokenAuthentication,)
     serializer_class = TimerDetailSerializer
     permission_classes = [IsAuthenticatedWorker]
 
@@ -131,14 +138,17 @@ class TimerDetail(GenericAPIView):
 
 
 class StartTimer(APIView):
+    # authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = [IsAuthenticatedWorker]
 
     def post(self, request, *args, **kwargs):
         worker = self.worker
         if not worker.is_working:
-            worker.start_timer()
+            worker.start_stop_timer(True)
             return Response(status=HTTP_200_OK)
-        return Response(data={'error': 'Is working now.'}, status=HTTP_400_BAD_REQUEST)
+        return Response(data={
+            'detail': "Is working now."
+        }, status=HTTP_400_BAD_REQUEST)
 
     @property
     def worker(self):
@@ -146,14 +156,17 @@ class StartTimer(APIView):
 
 
 class StopTimer(APIView):
+    # authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = [IsAuthenticatedWorker]
 
     def post(self, request, *args, **kwargs):
         worker = self.worker
         if worker.is_working:
-            worker.stop_timer()
+            worker.start_stop_timer(False)
             return Response(status=HTTP_200_OK)
-        return Response(data={'error': 'Does not working now.'}, status=HTTP_400_BAD_REQUEST)
+        return Response(data={
+            'detail': "Does not working now."
+        }, status=HTTP_400_BAD_REQUEST)
 
     @property
     def worker(self):
@@ -161,6 +174,7 @@ class StopTimer(APIView):
 
 
 class ResetTimer(APIView):
+    # authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = [IsAuthenticatedWorker]
 
     def post(self, request, *args, **kwargs):
@@ -168,7 +182,9 @@ class ResetTimer(APIView):
         if not worker.is_working:
             worker.reset_timer()
             return Response(status=HTTP_200_OK)
-        return Response(data={'error': 'Is working now.'}, status=HTTP_400_BAD_REQUEST)
+        return Response(data={
+            'detail': "Is working now."
+        }, status=HTTP_400_BAD_REQUEST)
 
     @property
     def worker(self):

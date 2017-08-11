@@ -75,7 +75,7 @@ class OperationWorkerDetail(RetrieveDestroyAPIView):
 
     @property
     def operation(self):
-        operation_id = self.kwargs.get(self.lookup_url_kwarg)
+        operation_id = self.kwargs.get('operation_id')
         operation = get_object_or_404(Operation, id=operation_id)
         return operation
 

@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
+from user.models import MyUser
+
 
 class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,20 +21,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         url_name = request.resolver_match.url_name
 
-        new_user = validated_data
-        password = new_user.pop('password')
-        admin_settings = {
-            'is_superuser': True,
-            'is_staff': True
-        }
-
-        if url_name == 'admin':
-            new_user.update(admin_settings)
-
-        user = User.objects.create(**new_user)
-        user.set_password(password)
-        user.save()
-
+        if url_name == 'register-admin':
+            user = MyUser.objects.create_admin(**validated_data)
+        else:
+            user = MyUser.objects.create_worker(**validated_data)
         return user
 
 
