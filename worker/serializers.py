@@ -1,8 +1,10 @@
+from django.utils import timezone
+
 from rest_framework import serializers
 
 from brigade.models import Brigade
-
 from operation.models import Operation
+from public.models import Payroll
 
 from .models import Worker, WorkerOperation
 
@@ -112,15 +114,43 @@ class WorkerOperationCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkerOperation
         fields = (
-            'id',
             'worker',
             'operation',
         )
+        read_only_fields = ('worker',)
 
     def validate(self, attrs):
-        operation =attrs.get('operation')
-        worker =attrs.get('worker')
+        worker = self.context['view'].worker
+        operation = attrs.get('operation')
         worker_operation = WorkerOperation.objects.filter(operation=operation, worker=worker)
         if worker_operation.exists():
             raise serializers.ValidationError('Already exist.')
+        attrs.update({'worker': worker})
         return attrs
+
+
+class PayrollCreateSerializer(serializers.Serializer):
+    workers = serializers.ListField(
+        child=serializers.IntegerField(),
+        write_only=True
+    )
+
+    def validate(self, attrs):
+        worker_ids = attrs.get('workers')
+        workers = Worker.objects.filter(pk__in=worker_ids)
+        if len(worker_ids) != workers.count():
+            raise serializers.ValidationError('Set existing workers please.')
+        return {'workers': workers}
+
+    def create(self, validated_data):
+        payroll = None
+        workers = validated_data.get('workers')
+        current_time = timezone.now()
+        for worker in workers:
+            payroll = Payroll(
+                worker=worker,
+                salary=worker.get_period_done(field='cost'),
+                date=current_time
+            )
+            payroll.save()
+        return payroll

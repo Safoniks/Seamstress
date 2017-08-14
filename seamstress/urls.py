@@ -23,7 +23,6 @@ from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
-from worker.views import WorkerOperationCreate
 from rest_framework_jwt.views import obtain_jwt_token
 
 
@@ -40,7 +39,7 @@ def api_root(request, format=None):
         'workers': reverse('core:worker-list', request=request, format=format),
         'brigades': reverse('core:brigade-list', request=request, format=format),
 
-        'set-worker-operation': reverse('core:create-worker-operation', request=request, format=format),
+        'payroll-to-workers': reverse('core:worker-payroll', request=request, format=format),
 
         'public-worker': reverse('public:worker-detail', request=request, format=format),
         'public-worker-operations': reverse('public:operation-list', request=request, format=format),
@@ -57,8 +56,6 @@ core_urlpatterns = [
     url(r'^operation-type/', include('operationtype.urls')),
     url(r'^worker/', include('worker.urls')),
     url(r'^brigade/', include('brigade.urls')),
-
-    url(r'^set-worker-operation/$', WorkerOperationCreate.as_view(), name='create-worker-operation'),
 
     url(r'^register/', include('user.urls')),
     url(r'^login/$', obtain_jwt_token, name='login-admin'),

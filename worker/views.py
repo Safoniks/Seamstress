@@ -3,10 +3,12 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
 from rest_framework.generics import (
+    ListCreateAPIView,
     ListAPIView,
     RetrieveUpdateDestroyAPIView,
-    CreateAPIView,
     RetrieveDestroyAPIView,
+    GenericAPIView,
+    CreateAPIView,
 )
 
 from operation.models import Operation
@@ -17,6 +19,7 @@ from .serializers import (
     WorkerOperationCreateSerializer,
     WorkerUpdateSerializer,
     CommonOperationSerializer,
+    PayrollCreateSerializer,
 )
 
 from operation.serializers import ProductOperationListSerializer
@@ -53,18 +56,17 @@ class WorkerDetail(RetrieveUpdateDestroyAPIView):
         return worker
 
 
-class WorkerOperationCreate(CreateAPIView):
-    queryset = WorkerOperation.objects.all()
-    serializer_class = WorkerOperationCreateSerializer
-
-
-class WorkerOperationList(ListAPIView):
-    serializer_class = CommonOperationSerializer
+class WorkerOperationList(ListCreateAPIView):
     lookup_url_kwarg = 'worker_id'
 
     def get_queryset(self):
         queryset_list = Operation.objects.filter(worker=self.worker)
         return queryset_list
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return WorkerOperationCreateSerializer
+        return CommonOperationSerializer
 
     @property
     def worker(self):
@@ -94,3 +96,7 @@ class WorkerOperationDetail(RetrieveDestroyAPIView):
         worker_id = self.kwargs.get('worker_id')
         worker = get_object_or_404(Worker, id=worker_id)
         return worker
+
+
+class PayrollToWorkers(CreateAPIView):
+    serializer_class = PayrollCreateSerializer

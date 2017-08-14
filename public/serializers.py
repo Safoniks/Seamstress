@@ -3,38 +3,10 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from operation.models import Operation
-from worker.models import WorkerOperation, Worker
+from worker.models import Worker
 from operationtype.serializers import OperationTypeSerializer
 
 from .validators import positive_number
-
-
-class PublicWorkerDetailSerializer(serializers.ModelSerializer):
-    first_name = serializers.SerializerMethodField()
-    last_name = serializers.SerializerMethodField()
-    brigade = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Worker
-        fields = (
-            'id',
-            'first_name',
-            'last_name',
-            'daily_done',
-            'daily_salary',
-            'goal',
-            'brigade',
-            'is_working',
-        )
-
-    def get_first_name(self, obj):
-        return obj.user.first_name
-
-    def get_last_name(self, obj):
-        return obj.user.last_name
-
-    def get_brigade(self, obj):
-        return obj.brigade_name
 
 
 class PublicWorkerUpdateSerializer(serializers.ModelSerializer):
@@ -80,9 +52,8 @@ class PublicOperationListSerializer(serializers.ModelSerializer):
 
     def get_done(self, obj):
         request = self.context.get('request')
-        worker = request.user.worker
-        worker_operation = WorkerOperation.objects.get(worker=worker, operation=obj)
-        return worker_operation.done
+        worker = request.user.worker if request else self.context.get('worker')
+        return worker.get_all_done(operation=obj)
 
 
 class PublicOperationDoneSerializer(serializers.Serializer):
@@ -98,6 +69,7 @@ class MyDateTimeField(serializers.DateTimeField):
 
 
 class TimerDetailSerializer(serializers.ModelSerializer):
+    time_worked = serializers.DurationField(source='daily_time_worked')
     last_reset = MyDateTimeField()
 
     class Meta:
@@ -112,3 +84,48 @@ class TimerDetailSerializer(serializers.ModelSerializer):
             'time_worked',
             'last_reset',
         )
+
+
+class PublicWorkerDetailSerializer(serializers.ModelSerializer):
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+    brigade = serializers.SerializerMethodField()
+    operations = serializers.SerializerMethodField()
+    daily_salary = serializers.SerializerMethodField()
+    period_salary = serializers.SerializerMethodField()
+    timer = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Worker
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'daily_salary',
+            'period_salary',
+            'goal',
+            'brigade',
+            'operations',
+            'timer',
+        )
+
+    def get_first_name(self, obj):
+        return obj.user.first_name
+
+    def get_last_name(self, obj):
+        return obj.user.last_name
+
+    def get_brigade(self, obj):
+        return obj.brigade_name
+
+    def get_daily_salary(self, obj):
+        return obj.get_daily_done(field='cost')
+
+    def get_period_salary(self, obj):
+        return obj.get_period_done(field='cost')
+
+    def get_operations(self, obj):
+        return PublicOperationListSerializer(obj.operations, many=True, context={'worker': obj}).data
+
+    def get_timer(self, obj):
+        return TimerDetailSerializer(obj).data

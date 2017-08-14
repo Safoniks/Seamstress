@@ -5,7 +5,8 @@ from .models import Product, ProductPhoto
 
 class ProductPhotosCreateSerializer(serializers.Serializer):
     photo = serializers.ListField(
-        child=serializers.ImageField()
+        child=serializers.ImageField(),
+        write_only=True
     )
     product_id = serializers.IntegerField()
 

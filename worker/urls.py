@@ -8,4 +8,6 @@ urlpatterns = format_suffix_patterns([
     url(r'^(?P<worker_id>\d+)/$', views.WorkerDetail.as_view(), name='worker-detail'),
     url(r'^(?P<worker_id>\d+)/operation/$', views.WorkerOperationList.as_view(), name='worker-operation-list'),
     url(r'^(?P<worker_id>\d+)/operation/(?P<operation_id>\d+)/$', views.WorkerOperationDetail.as_view(), name='worker-operation-detail'),
+
+    url(r'^payroll/$', views.PayrollToWorkers.as_view(), name='worker-payroll'),
 ])

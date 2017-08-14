@@ -7,6 +7,11 @@ class OperationType(models.Model):
     cost_per_second = models.FloatField()
     full_cost = models.FloatField(blank=True, null=True)
 
+    class Meta:
+        db_table = 'operation_type'
+        verbose_name = 'operation type'
+        verbose_name_plural = 'operation types'
+
     def __str__(self):
         return self.name
 

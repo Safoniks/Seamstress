@@ -81,7 +81,7 @@ class PublicOperationDetail(RetrieveAPIView):
 
     def get_object(self):
         operation_id = self.kwargs.get(self.lookup_url_kwarg)
-        operation_obj = Operation.objects.get(worker=self.worker, id=operation_id)
+        operation_obj = get_object_or_404(Operation, worker=self.worker, id=operation_id)
         return operation_obj
 
     @property
@@ -97,7 +97,7 @@ class PublicOperationDone(CreateAPIView):
 
     def get_object(self):
         operation_id = self.kwargs.get(self.lookup_url_kwarg)
-        operation_obj = Operation.objects.get(worker=self.worker, id=operation_id)
+        operation_obj = get_object_or_404(Operation, worker=self.worker, id=operation_id)
         return operation_obj
 
     @property
@@ -112,8 +112,8 @@ class PublicOperationDone(CreateAPIView):
             worker_operation = get_object_or_404(WorkerOperation, worker=self.worker, operation=self.get_object())
             worker_operation.operation_done(amount)
 
-            operation_response = PublicOperationListSerializer(self.get_object(), context={'request': request}).data
-            return Response(operation_response, status=HTTP_200_OK)
+            worker_detail_response = PublicWorkerDetailSerializer(self.worker, context={'request': request}).data
+            return Response(worker_detail_response, status=HTTP_200_OK)
         return Response(done_serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
@@ -132,7 +132,6 @@ class TimerDetail(GenericAPIView):
         worker = self.get_object()
         serializer = self.serializer_class
 
-        worker.refresh_time_worked()
         timer_serializer = serializer(worker).data
         return Response(timer_serializer, status=HTTP_200_OK)
 
@@ -144,7 +143,7 @@ class StartTimer(APIView):
     def post(self, request, *args, **kwargs):
         worker = self.worker
         if not worker.is_working:
-            worker.start_stop_timer(True)
+            worker.start_timer()
             return Response(status=HTTP_200_OK)
         return Response(data={
             'detail': "Is working now."
@@ -162,7 +161,7 @@ class StopTimer(APIView):
     def post(self, request, *args, **kwargs):
         worker = self.worker
         if worker.is_working:
-            worker.start_stop_timer(False)
+            worker.stop_timer()
             return Response(status=HTTP_200_OK)
         return Response(data={
             'detail': "Does not working now."
