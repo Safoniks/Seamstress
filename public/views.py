@@ -20,6 +20,7 @@ from .serializers import (
     PublicWorkerDetailSerializer,
     PublicWorkerUpdateSerializer,
     TimerDetailSerializer,
+    RatingDoneDailySerializer,
 )
 from .permissions import IsAuthenticatedWorker
 
@@ -188,3 +189,22 @@ class ResetTimer(APIView):
     @property
     def worker(self):
         return self.request.user.worker
+
+
+class RatingDoneDaily(GenericAPIView):
+    # authentication_classes = (JSONWebTokenAuthentication,)
+    serializer_class = RatingDoneDailySerializer
+    permission_classes = [IsAuthenticatedWorker]
+
+    def get_object(self):
+        try:
+            return self.request.user.worker
+        except AttributeError:
+            raise Http404
+
+    def get(self, request, *args, **kwargs):
+        worker = self.get_object()
+        serializer = self.serializer_class
+
+        rating_serializer = serializer(worker).data
+        return Response(rating_serializer, status=HTTP_200_OK)

@@ -5,8 +5,37 @@ from rest_framework import serializers
 from operation.models import Operation
 from worker.models import Worker
 from operationtype.serializers import OperationTypeSerializer
+from worker.serializers import WorkerProfileSerializer
 
 from .validators import positive_number
+
+
+class WorkerDoneDailySerializer(WorkerProfileSerializer):
+    done = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Worker
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'done',
+        )
+
+    def get_done(self, obj):
+        return obj.daily_done
+
+
+class RatingDoneDailySerializer(serializers.Serializer):
+    my_position = serializers.SerializerMethodField()
+    worker_list = serializers.SerializerMethodField()
+
+    def get_my_position(self, obj):
+        return obj.get_rating_position_with(prop='daily_done')
+
+    def get_worker_list(self, obj):
+        workers = Worker.objects.all_ordered_by(prop='daily_done')
+        return WorkerDoneDailySerializer(workers, many=True).data
 
 
 class PublicWorkerUpdateSerializer(serializers.ModelSerializer):
@@ -33,7 +62,6 @@ class PublicWorkerUpdateSerializer(serializers.ModelSerializer):
 class PublicOperationListSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
     product = serializers.SerializerMethodField()
-    done = serializers.SerializerMethodField()
 
     class Meta:
         model = Operation
@@ -41,7 +69,6 @@ class PublicOperationListSerializer(serializers.ModelSerializer):
             'id',
             'type',
             'product',
-            'done',
         )
 
     def get_type(self, obj):
@@ -49,11 +76,6 @@ class PublicOperationListSerializer(serializers.ModelSerializer):
 
     def get_product(self, obj):
         return obj.product.name
-
-    def get_done(self, obj):
-        request = self.context.get('request')
-        worker = request.user.worker if request else self.context.get('worker')
-        return worker.get_all_done(operation=obj)
 
 
 class PublicOperationDoneSerializer(serializers.Serializer):
@@ -92,7 +114,7 @@ class PublicWorkerDetailSerializer(serializers.ModelSerializer):
     brigade = serializers.SerializerMethodField()
     operations = serializers.SerializerMethodField()
     daily_salary = serializers.SerializerMethodField()
-    period_salary = serializers.SerializerMethodField()
+    last_period_salary = serializers.SerializerMethodField()
     timer = serializers.SerializerMethodField()
 
     class Meta:
@@ -102,7 +124,7 @@ class PublicWorkerDetailSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'daily_salary',
-            'period_salary',
+            'last_period_salary',
             'goal',
             'brigade',
             'operations',
@@ -119,10 +141,10 @@ class PublicWorkerDetailSerializer(serializers.ModelSerializer):
         return obj.brigade_name
 
     def get_daily_salary(self, obj):
-        return obj.get_daily_done(field='cost')
+        return obj.daily_salary
 
-    def get_period_salary(self, obj):
-        return obj.get_period_done(field='cost')
+    def get_last_period_salary(self, obj):
+        return obj.last_period_salary
 
     def get_operations(self, obj):
         return PublicOperationListSerializer(obj.operations, many=True, context={'worker': obj}).data

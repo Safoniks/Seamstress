@@ -31,12 +31,20 @@ class WorkerOperation(models.Model):
         worker_operation_log.save()
 
 
+class WorkerManager(models.Manager):
+    def all_ordered_by(self, prop='daily_done'):
+        workers = Worker.objects.all()
+        return sorted(workers, key=lambda worker: getattr(worker, prop), reverse=True)
+
+
 class Worker(models.Model):
     user = models.OneToOneField('user.MyUser')
     brigade = models.ForeignKey('brigade.Brigade', null=True, blank=True, on_delete=models.SET_NULL)
     worker_operations = models.ManyToManyField('operation.Operation', through='worker.WorkerOperation')
     goal = models.FloatField(blank=True, null=True)
     is_working = models.BooleanField(blank=True, default=False)
+
+    objects = WorkerManager()
 
     class Meta:
         db_table = 'worker'
@@ -47,6 +55,24 @@ class Worker(models.Model):
         return self.user.username
 
     @property
+    def interval(self):
+        current_time = timezone.now()
+        return {
+            'DAILY': {
+                'since': self.last_reset,
+                'until': current_time,
+            },
+            'LAST_PERIOD': {
+                'since': self.last_payroll,
+                'until': current_time,
+            },
+            'ALL_TIME': {
+                'since': self.user.date_joined,
+                'until': current_time,
+            },
+        }
+
+    @property
     def brigade_name(self):
         brigade = self.brigade
         if brigade:
@@ -55,23 +81,19 @@ class Worker(models.Model):
 
     @property
     def operations(self):
-        operations = self.worker_operations.all()
-        return operations
+        return self.worker_operations.all()
 
     @property
     def timings(self):
-        timings = WorkerTiming.objects.filter(worker=self)
-        return timings
+        return WorkerTiming.objects.filter(worker=self)
 
     @property
     def payrolls(self):
-        payrolls = Payroll.objects.filter(worker=self)
-        return payrolls
+        return Payroll.objects.filter(worker=self)
 
     @property
     def done_operations(self):
-        done_operations = WorkerOperationLogs.objects.filter(worker=self)
-        return done_operations
+        return WorkerOperationLogs.objects.filter(worker=self)
 
     @property
     def last_reset(self):
@@ -85,26 +107,33 @@ class Worker(models.Model):
 
     @property
     def daily_time_worked(self):
-        since = self.last_reset
-        until = timezone.now()
-        return self.get_time_worked_in_period(since=since, until=until)
+        return self.get_time_worked_in_interval(**self.interval.get('DAILY'))
 
-    def get_daily_done(self, field='done', operation=None):
-        since = self.last_reset
-        until = timezone.now()
-        return self.get_done_in_period(since=since, until=until, field=field, operation=operation)
+    @property
+    def daily_done(self):
+        return self.get_done_in_interval(**self.interval.get('DAILY'))
 
-    def get_period_done(self, field='done', operation=None):
-        since = self.last_payroll
-        until = timezone.now()
-        return self.get_done_in_period(since=since, until=until, field=field, operation=operation)
+    @property
+    def daily_salary(self):
+        return self.get_done_in_interval(**self.interval.get('DAILY'), field='cost')
 
-    def get_all_done(self, field='done', operation=None):
-        since = self.user.date_joined
-        until = timezone.now()
-        return self.get_done_in_period(since=since, until=until, field=field, operation=operation)
+    @property
+    def last_period_done(self):
+        return self.get_done_in_interval(**self.interval.get('LAST_PERIOD'))
 
-    def get_time_worked_in_period(self, since, until):
+    @property
+    def last_period_salary(self):
+        return self.get_done_in_interval(**self.interval.get('LAST_PERIOD'), field='cost')
+
+    @property
+    def all_time_done(self):
+        return self.get_done_in_interval(**self.interval.get('ALL_TIME'))
+
+    @property
+    def all_time_salary(self):
+        return self.get_done_in_interval(**self.interval.get('ALL_TIME'), field='cost')
+
+    def get_time_worked_in_interval(self, since, until):
         time_worked = timedelta()
         timings = self.timings.filter(date__gt=since, date__lt=until)
         stop_timings = timings.filter(action=WorkerTiming.STOP)
@@ -125,7 +154,7 @@ class Worker(models.Model):
                         time_worked += stop.delta
         return time_worked
 
-    def get_done_in_period(self, since, until, field='done', operation=None):
+    def get_done_in_interval(self, since, until, field='done', operation=None):
         result = 0
         done_operations = self.done_operations.filter(created__gt=since, created__lt=until)
         if operation:
@@ -134,6 +163,12 @@ class Worker(models.Model):
             for done_operation in done_operations:
                 result += getattr(done_operation, field)
         return round(result, 2)
+
+    def get_rating_position_with(self, prop='daily_done'):
+        workers = self.__class__.objects.all_ordered_by(prop=prop)
+        for i, worker in enumerate(workers):
+            if worker == self:
+                return i + 1
 
     def start_timer(self):
         worker_timing = WorkerTiming(
