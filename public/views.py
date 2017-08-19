@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_201_CREATED, HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
 from rest_framework.generics import (
     ListAPIView,
@@ -13,6 +13,7 @@ from rest_framework.generics import (
 
 from operation.models import Operation
 from worker.models import WorkerOperation
+from public.models import WorkerTiming
 
 from .serializers import (
     PublicOperationListSerializer,
@@ -21,6 +22,7 @@ from .serializers import (
     PublicWorkerUpdateSerializer,
     TimerDetailSerializer,
     RatingDoneDailySerializer,
+    WorkerGoalSerializer,
 )
 from .permissions import IsAuthenticatedWorker
 
@@ -144,7 +146,7 @@ class StartTimer(APIView):
     def post(self, request, *args, **kwargs):
         worker = self.worker
         if not worker.is_working:
-            worker.start_timer()
+            worker.timer_do(WorkerTiming.START)
             return Response(status=HTTP_200_OK)
         return Response(data={
             'detail': "Is working now."
@@ -162,7 +164,7 @@ class StopTimer(APIView):
     def post(self, request, *args, **kwargs):
         worker = self.worker
         if worker.is_working:
-            worker.stop_timer()
+            worker.timer_do(WorkerTiming.STOP)
             return Response(status=HTTP_200_OK)
         return Response(data={
             'detail': "Does not working now."
@@ -180,7 +182,7 @@ class ResetTimer(APIView):
     def post(self, request, *args, **kwargs):
         worker = self.worker
         if not worker.is_working:
-            worker.reset_timer()
+            worker.timer_do(WorkerTiming.RESET)
             return Response(status=HTTP_200_OK)
         return Response(data={
             'detail': "Is working now."
@@ -208,3 +210,71 @@ class RatingDoneDaily(GenericAPIView):
 
         rating_serializer = serializer(worker).data
         return Response(rating_serializer, status=HTTP_200_OK)
+
+
+class WorkerGoal(GenericAPIView):
+    # authentication_classes = (JSONWebTokenAuthentication,)
+    serializer_class = WorkerGoalSerializer
+    permission_classes = [IsAuthenticatedWorker]
+
+    def get_object(self):
+        try:
+            return self.request.user.worker
+        except AttributeError:
+            raise Http404
+
+    def get(self, request, *args, **kwargs):
+        worker = self.get_object()
+        serializer = self.serializer_class
+
+        if worker.goal:
+            goal_serializer = serializer(worker.goal).data
+            return Response(goal_serializer, status=HTTP_200_OK)
+        else:
+            raise Http404
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        worker = self.get_object()
+        serializer = self.serializer_class
+
+        if worker.goal:
+            return Response({
+                "detail": "Goal already exist."
+            }, status=HTTP_400_BAD_REQUEST)
+        else:
+            goal_serializer = serializer(data=data)
+            if goal_serializer.is_valid():
+                goal = goal_serializer.save()
+                worker.goal = goal
+                worker.save()
+                return Response(goal_serializer.data, status=HTTP_201_CREATED)
+            else:
+                return Response(goal_serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+    def put(self, request, *args, **kwargs):
+        data = request.data
+        worker = self.get_object()
+        serializer = self.serializer_class
+
+        if worker.goal:
+            goal_serializer = serializer(worker.goal, data=data)
+            if goal_serializer.is_valid():
+                goal_serializer.save()
+                return Response(goal_serializer.data, status=HTTP_201_CREATED)
+            else:
+                return Response(goal_serializer.errors, status=HTTP_400_BAD_REQUEST)
+        else:
+            return Response({
+                "detail": "Goal does not exist."
+            }, status=HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        worker = self.get_object()
+        if worker.goal:
+            worker.goal.delete()
+            return Response(status=HTTP_204_NO_CONTENT)
+        else:
+            return Response({
+                "detail": "Goal does not exist."
+            }, status=HTTP_400_BAD_REQUEST)

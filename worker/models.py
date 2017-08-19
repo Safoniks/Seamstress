@@ -31,6 +31,21 @@ class WorkerOperation(models.Model):
         worker_operation_log.save()
 
 
+class Goal(models.Model):
+    name = models.CharField(max_length=100, blank=True, default='')
+    amount = models.FloatField(null=True)
+    start = models.DateTimeField(auto_now_add=True)
+    end = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'goal'
+        verbose_name = 'goal'
+        verbose_name_plural = 'goals'
+
+    def __str__(self):
+        return self.name
+
+
 class WorkerManager(models.Manager):
     def all_ordered_by(self, prop='daily_done'):
         workers = Worker.objects.all()
@@ -39,10 +54,9 @@ class WorkerManager(models.Manager):
 
 class Worker(models.Model):
     user = models.OneToOneField('user.MyUser')
+    goal = models.OneToOneField('worker.Goal', null=True, on_delete=models.SET_NULL)
     brigade = models.ForeignKey('brigade.Brigade', null=True, blank=True, on_delete=models.SET_NULL)
     worker_operations = models.ManyToManyField('operation.Operation', through='worker.WorkerOperation')
-    goal = models.FloatField(blank=True, null=True)
-    is_working = models.BooleanField(blank=True, default=False)
 
     objects = WorkerManager()
 
@@ -71,6 +85,13 @@ class Worker(models.Model):
                 'until': current_time,
             },
         }
+
+    @property
+    def is_working(self):
+        last_timing = self.timings.last()
+        if last_timing and last_timing.action == WorkerTiming.START:
+            return True
+        return False
 
     @property
     def brigade_name(self):
@@ -170,29 +191,9 @@ class Worker(models.Model):
             if worker == self:
                 return i + 1
 
-    def start_timer(self):
+    def timer_do(self, action):
         worker_timing = WorkerTiming(
             worker=self,
-            action=WorkerTiming.START
-        )
-        self.is_working = True
-
-        worker_timing.save()
-        self.save()
-
-    def stop_timer(self):
-        worker_timing = WorkerTiming(
-            worker=self,
-            action=WorkerTiming.STOP
-        )
-        self.is_working = False
-
-        worker_timing.save()
-        self.save()
-
-    def reset_timer(self):
-        worker_timing = WorkerTiming(
-            worker=self,
-            action=WorkerTiming.RESET
+            action=action
         )
         worker_timing.save()
