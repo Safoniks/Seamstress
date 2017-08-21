@@ -33,6 +33,6 @@ class Migration(migrations.Migration):
         ),
         migrations.RemoveField(
             model_name='worker',
-            name='is_working',
+            name='is_active',
         ),
     ]

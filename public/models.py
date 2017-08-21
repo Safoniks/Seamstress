@@ -42,14 +42,15 @@ class WorkerTiming(models.Model):
     def delta(self):
         current_time = self.date
         try:
-            prev_timing = self.get_previous_by_date()
+            prev_timing = self
+            while True:
+                prev_timing = prev_timing.get_previous_by_date()
+                if prev_timing.action != self.RESET:
+                    break
         except:
             prev_timing = None
 
-        if prev_timing and prev_timing.action != self.RESET:
-            prev_time = prev_timing.date
-            return current_time - prev_time
-        return timedelta()
+        return current_time - prev_timing.date if prev_timing else timedelta()
 
 
 class Payroll(models.Model):

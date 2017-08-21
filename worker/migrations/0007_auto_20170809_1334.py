@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.RenameField(
             model_name='worker',
             old_name='is_active',
-            new_name='is_working',
+            new_name='is_active',
         ),
         migrations.AddField(
             model_name='worker',

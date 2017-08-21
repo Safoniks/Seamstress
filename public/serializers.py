@@ -31,6 +31,8 @@ class WorkerGoalSerializer(serializers.ModelSerializer):
             'amount',
             'start',
             'end',
+            'tempo',
+            'is_active',
         )
 
 
@@ -112,12 +114,12 @@ class TimerDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Worker
         fields = (
-            'is_working',
+            'is_active',
             'time_worked',
             'last_reset',
         )
         read_only_fields = (
-            'is_working',
+            'is_active',
             'time_worked',
             'last_reset',
         )

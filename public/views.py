@@ -145,7 +145,7 @@ class StartTimer(APIView):
 
     def post(self, request, *args, **kwargs):
         worker = self.worker
-        if not worker.is_working:
+        if not worker.is_active:
             worker.timer_do(WorkerTiming.START)
             return Response(status=HTTP_200_OK)
         return Response(data={
@@ -163,7 +163,7 @@ class StopTimer(APIView):
 
     def post(self, request, *args, **kwargs):
         worker = self.worker
-        if worker.is_working:
+        if worker.is_active:
             worker.timer_do(WorkerTiming.STOP)
             return Response(status=HTTP_200_OK)
         return Response(data={
@@ -181,7 +181,7 @@ class ResetTimer(APIView):
 
     def post(self, request, *args, **kwargs):
         worker = self.worker
-        if not worker.is_working:
+        if not worker.is_active:
             worker.timer_do(WorkerTiming.RESET)
             return Response(status=HTTP_200_OK)
         return Response(data={
