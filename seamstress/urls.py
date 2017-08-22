@@ -29,13 +29,15 @@ from rest_framework_jwt.views import obtain_jwt_token
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'register-admin': reverse('core:register-admin', request=request, format=format),
         'register-worker': reverse('core:register-worker', request=request, format=format),
+        'register-technologist': reverse('core:register-technologist', request=request, format=format),
+        'register-director': reverse('core:register-director', request=request, format=format),
         'login-admin': reverse('core:login-admin', request=request, format=format),
         'login-worker': reverse('public:login-worker', request=request, format=format),
 
         'products': reverse('core:product-list', request=request, format=format),
         'operation-types': reverse('core:operation-type-list', request=request, format=format),
+        'operation-type-categories': reverse('core:operation-type-category-list', request=request, format=format),
         'workers': reverse('core:worker-list', request=request, format=format),
         'brigades': reverse('core:brigade-list', request=request, format=format),
 
@@ -56,6 +58,7 @@ def api_root(request, format=None):
 core_urlpatterns = [
     url(r'^product/', include('product.urls')),
     url(r'^operation-type/', include('operationtype.urls')),
+    url(r'^operation-type-category/', include('operationtypecategory.urls')),
     url(r'^worker/', include('worker.urls')),
     url(r'^brigade/', include('brigade.urls')),
 

@@ -42,8 +42,9 @@ INSTALLED_APPS = [
 
 
     'product.apps.ProductConfig',
-    'operationtype.apps.OperationtypeConfig',
     'operation.apps.OperationConfig',
+    'operationtype.apps.OperationtypeConfig',
+    'operationtypecategory.apps.OperationtypecategoryConfig',
     'worker.apps.WorkerConfig',
     'user.apps.UserConfig',
     'brigade.apps.BrigadeConfig',
@@ -74,6 +75,7 @@ REST_FRAMEWORK = {
 
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'custom_jwt.jwt_response_payload_handler',
+    'JWT_PAYLOAD_HANDLER': 'custom_jwt.jwt_payload_handler',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=10)
 }
 

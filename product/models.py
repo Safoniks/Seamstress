@@ -2,6 +2,8 @@ import os
 from django.db import models
 from django.conf import settings
 
+from operation.models import Operation
+
 
 def get_image_path(instance, filename):
     return os.path.join(settings.PRODUCT_PHOTOS_DIR_NAME, str(instance.product.id), filename)
@@ -33,3 +35,7 @@ class Product(models.Model):
     @property
     def photos(self):
         return ProductPhoto.objects.filter(product=self)
+
+    @property
+    def operations(self):
+        return Operation.objects.filter(product=self)

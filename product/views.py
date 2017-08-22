@@ -17,6 +17,7 @@ from rest_framework.generics import (
 from .models import Product, ProductPhoto
 from .serializers import (
     ProductSerializer,
+    ProductDetailSerializer,
     ProductPhotoSerializer,
     ProductPhotosCreateSerializer,
 )
@@ -60,7 +61,7 @@ class ProductList(ListCreateAPIView):
 
 class ProductDetail(RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class = ProductDetailSerializer
     lookup_url_kwarg = 'product_id'
 
     def destroy(self, request, *args, **kwargs):

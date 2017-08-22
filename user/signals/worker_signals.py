@@ -7,7 +7,7 @@ from user.models import MyUser
 
 @receiver(post_save, sender=MyUser)
 def create_worker(sender, instance, created, **kwargs):
-    if created and not instance.is_superuser and not instance.is_staff:
+    if created and instance.is_worker():
         new_worker = Worker(user=instance)
         new_worker.save()
 

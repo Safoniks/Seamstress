@@ -3,9 +3,9 @@ from django.db import models
 
 class OperationType(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    category = models.ForeignKey('operationtypecategory.OperationTypeCategory')
     duration = models.PositiveIntegerField()
-    cost_per_second = models.FloatField()
-    full_cost = models.FloatField(blank=True, null=True)
+    full_cost = models.FloatField(blank=True)
 
     class Meta:
         db_table = 'operation_type'
@@ -16,5 +16,5 @@ class OperationType(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.full_cost = self.cost_per_second * self.duration
+        self.full_cost = self.category.cost_per_second * self.duration
         super(OperationType, self).save(*args, **kwargs)

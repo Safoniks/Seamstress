@@ -1,20 +1,19 @@
-from django.shortcuts import get_object_or_404
 from django.http import Http404
-
-from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_201_CREATED, HTTP_204_NO_CONTENT
-from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
 from rest_framework.generics import (
     ListAPIView,
     RetrieveAPIView,
     CreateAPIView,
     GenericAPIView,
 )
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_201_CREATED, HTTP_204_NO_CONTENT
+from rest_framework.views import APIView
 
 from operation.models import Operation
-from worker.models import WorkerOperation
 from public.models import WorkerTiming
-
+from user.permissions import IsAuthenticatedWorker
+from worker.models import WorkerOperation
 from .serializers import (
     PublicOperationListSerializer,
     PublicOperationDoneSerializer,
@@ -24,9 +23,6 @@ from .serializers import (
     RatingDoneDailySerializer,
     WorkerGoalSerializer,
 )
-from .permissions import IsAuthenticatedWorker
-
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 
 class PublicWorkerDetail(GenericAPIView):

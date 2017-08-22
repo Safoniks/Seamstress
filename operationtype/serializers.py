@@ -1,19 +1,22 @@
 from rest_framework import serializers
 
+from operationtypecategory.serializers import OperationTypeCategorySerializer
+
 from .models import OperationType
 
 
 class OperationTypeSerializer(serializers.ModelSerializer):
-    # url = serializers.HyperlinkedIdentityField(view_name="operation-type:operation-type-detail")
+    category = OperationTypeCategorySerializer(read_only=True)
+    category_id = serializers.ModelField(model_field=OperationType()._meta.get_field('category'), write_only=True)
 
     class Meta:
         model = OperationType
         fields = (
-            # 'url',
             'id',
             'name',
+            'category',
+            'category_id',
             'duration',
-            'cost_per_second',
             'full_cost',
         )
         read_only_fields = ('full_cost',)

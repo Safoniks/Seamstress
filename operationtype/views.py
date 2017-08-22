@@ -1,5 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 
+
 from .models import OperationType
 from .serializers import (
     OperationTypeSerializer,

@@ -5,7 +5,10 @@ from rest_framework import serializers
 from user.models import MyUser
 
 
-class UserCreateSerializer(serializers.ModelSerializer):
+class WorkerCreateSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+
     class Meta:
         model = User
         fields = (
@@ -18,14 +21,50 @@ class UserCreateSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        request = self.context.get('request')
-        url_name = request.resolver_match.url_name
+        worker = MyUser.objects.create_worker(**validated_data)
+        return worker
 
-        if url_name == 'register-admin':
-            user = MyUser.objects.create_admin(**validated_data)
-        else:
-            user = MyUser.objects.create_worker(**validated_data)
-        return user
+
+class TechnologistCreateSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'username',
+            'password',
+            'first_name',
+            'last_name',
+        )
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        technologist = MyUser.objects.create_technologist(**validated_data)
+        return technologist
+
+
+class DirectorCreateSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'username',
+            'password',
+            'first_name',
+            'last_name',
+            'email',
+        )
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        director = MyUser.objects.create_director(**validated_data)
+        return director
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -34,5 +73,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = (
             'first_name',
             'last_name',
+            'email',
         )
-        read_only_fields = ('first_name', 'last_name', )
+        read_only_fields = ('first_name', 'last_name', 'email')

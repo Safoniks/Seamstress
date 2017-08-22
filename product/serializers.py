@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import Product, ProductPhoto
+from operation.serializers import ProductOperationListSerializer
 
 
 class ProductPhotosCreateSerializer(serializers.Serializer):
@@ -56,4 +57,19 @@ class ProductSerializer(serializers.ModelSerializer):
             'name',
             'description',
             'photos',
+        )
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    photos = ProductPhotoSerializer(many=True, read_only=True)
+    operations = ProductOperationListSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Product
+        fields = (
+            'id',
+            'name',
+            'description',
+            'photos',
+            'operations',
         )
