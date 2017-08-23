@@ -1,9 +1,4 @@
-import os
-import shutil
-
 from django.shortcuts import get_object_or_404
-from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
@@ -17,9 +12,10 @@ from rest_framework.generics import (
 from .models import Product, ProductPhoto
 from .serializers import (
     ProductSerializer,
-    ProductDetailSerializer,
     ProductPhotoSerializer,
     ProductPhotosCreateSerializer,
+    ProductOperationsCreateUpdateSerializer,
+    ProductPhotosUpdateSerializer,
 )
 
 
@@ -29,49 +25,103 @@ class ProductList(ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         data = request.data
-        photos = dict(request.FILES).get('photo', None)
-        ######### for urlfield needed
-        # serializer_context = {
-        #     'request': request,
-        # }
-        # product_serializer = ProductSerializer(data=new_product, context=serializer_context)
+        photos = request.data.get('photos', None)
+        photo_files = dict(request.FILES).get('photos', None)
+        operations = request.data.get('operations', None)
         product_serializer = ProductSerializer(data=data)
 
         if product_serializer.is_valid():
-            product_serializer.save()
-            product = product_serializer.data
-
-            if photos:
-                photos_serializer = ProductPhotosCreateSerializer(data={
-                    'photo': photos,
-                    'product_id': product['id']
-                })
-
-                if photos_serializer.is_valid(raise_exception=True):
-                    photos_serializer.save()
-                    del product['photos']# photos_serializer.data = [None, ....] ?????????
-                    return Response(product, status=HTTP_201_CREATED)
-                else:
-                    Product.objects.get(id=product['id']).delete()# invalid photos ????????????????????????????
-                    return Response(photos_serializer.errors, status=HTTP_400_BAD_REQUEST)
-            return Response(product, status=HTTP_201_CREATED)
+            is_valid = True
+            product = product_serializer.save()
+            serialized_product = product_serializer.data
         else:
-            return Response(product_serializer.errors, status=HTTP_400_BAD_REQUEST)
+            is_valid = False
+            product = None
+            serialized_product = {}
+        product_serializer_errors = product_serializer.errors
+        serializer_context = {'product': product}
+
+        if photos:
+            photos_serializer = ProductPhotosCreateSerializer(
+                data={'photos': photo_files},
+                context=serializer_context
+            )
+
+            if photos_serializer.is_valid() and is_valid:
+                photos_serializer.save()
+                serialized_product['photos'] = photos_serializer.context['photos']
+            else:
+                is_valid = False
+                product_serializer_errors.update(photos_serializer.errors)
+
+        if operations:
+            operations_serializer = ProductOperationsCreateUpdateSerializer(
+                data={'operations': operations},
+                context=serializer_context
+            )
+
+            if operations_serializer.is_valid() and is_valid:
+                operations_serializer.save()
+                serialized_product['operations'] = operations_serializer.context['operations']
+            else:
+                is_valid = False
+                product_serializer_errors.update(operations_serializer.errors)
+
+        if is_valid:
+            return Response(serialized_product, status=HTTP_201_CREATED)
+        else:
+            product and product.delete()
+            return Response(product_serializer_errors, status=HTTP_400_BAD_REQUEST)
 
 
 class ProductDetail(RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductDetailSerializer
+    serializer_class = ProductSerializer
     lookup_url_kwarg = 'product_id'
 
-    def destroy(self, request, *args, **kwargs):
+    def update(self, request, *args, **kwargs):
+        data = request.data
+        product = self.product
+        serializer_context = {'product': product}
+        new_photos = request.data.get('photos', [])
+        new_operations = request.data.get('operations', [])
+
+        product_serializer = ProductSerializer(product, data=data)
+        photos_serializer = ProductPhotosUpdateSerializer(
+            product.photos,
+            data={'photos': new_photos},
+            context=serializer_context
+        )
+        operations_serializer = ProductOperationsCreateUpdateSerializer(
+            product.operations,
+            data={'operations': new_operations},
+            context=serializer_context
+        )
+
+        validated = (
+            product_serializer.is_valid(),
+            photos_serializer.is_valid(),
+            operations_serializer.is_valid(),
+        )
+        if False not in validated:
+            product_serializer.save()
+            photos_serializer.save()
+            operations_serializer.save()
+            serialized_product = product_serializer.data
+            serialized_product['photos'] = photos_serializer.context['photos']
+            serialized_product['operations'] = operations_serializer.context['operations']
+            return Response(serialized_product, status=HTTP_201_CREATED)
+        else:
+            product_serializer_errors = product_serializer.errors
+            product_serializer_errors.update(photos_serializer.errors)
+            product_serializer_errors.update(operations_serializer.errors)
+            return Response(product_serializer_errors, status=HTTP_400_BAD_REQUEST)
+
+    @property
+    def product(self):
         product_id = self.kwargs.get(self.lookup_url_kwarg)
-        product_photo_dir = os.path.join(settings.MEDIA_ROOT, settings.PRODUCT_PHOTOS_DIR_NAME, str(product_id))
-        try:
-            shutil.rmtree(product_photo_dir)
-        except OSError:
-            pass
-        return super(ProductDetail, self).destroy(request, *args, **kwargs)
+        product = get_object_or_404(Product, id=product_id)
+        return product
 
 
 class ProductPhotoList(ListCreateAPIView):
@@ -80,19 +130,17 @@ class ProductPhotoList(ListCreateAPIView):
     lookup_url_kwarg = 'product_id'
 
     def create(self, request, *args, **kwargs):
-        product_id = self.kwargs.get(self.lookup_url_kwarg)
-        photos = dict(request.FILES).get('photo')
-        photos_serializer = ProductPhotosCreateSerializer(data={
-            'photo': photos,
-            'product_id': product_id
-        })
-        if photos_serializer.is_valid(raise_exception=True):
+        photos = dict(request.FILES).get('photos')
+        serializer_context = {'product': self.product}
+        photos_serializer = ProductPhotosCreateSerializer(data={'photos': photos}, context=serializer_context)
+        if photos_serializer.is_valid():
             photos_serializer.save()
-            return Response(status=HTTP_201_CREATED)
+            photos = photos_serializer.context['photos']
+            return Response(photos, status=HTTP_201_CREATED)
         return Response(photos_serializer.errors, status=HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
-        queryset_list = ProductPhoto.objects.filter(product=self.product)
+        queryset_list = ProductPhoto.active_objects.filter(product=self.product)
         return queryset_list
 
     @property
@@ -103,21 +151,6 @@ class ProductPhotoList(ListCreateAPIView):
 
 
 class ProductPhotoDetail(RetrieveDestroyAPIView):
-    queryset = ProductPhoto.objects.all()
+    queryset = ProductPhoto.active_objects.all()
     serializer_class = ProductPhotoSerializer
     lookup_url_kwarg = 'photo_id'
-
-    def destroy(self, request, *args, **kwargs):
-        product_id = self.kwargs.get('product_id')
-        photo_id = self.kwargs.get('photo_id')
-        try:
-            photo = ProductPhoto.objects.filter(product__id=product_id).get(id=photo_id)
-        except ObjectDoesNotExist:
-            return Response(status=HTTP_400_BAD_REQUEST)
-
-        product_photo_path = os.path.join(settings.MEDIA_ROOT, photo.photo.name)
-        try:
-            os.remove(product_photo_path)
-        except OSError:
-            pass
-        return super(ProductPhotoDetail, self).destroy(request, *args, **kwargs)

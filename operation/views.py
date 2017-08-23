@@ -26,6 +26,9 @@ class ProductOperationList(ListCreateAPIView):
         queryset_list = Operation.objects.filter(product=self.product)
         return queryset_list
 
+    def get_serializer_context(self):
+        return {'product': self.product}
+
     def perform_create(self, serializer):
         serializer.save(product=self.product)
 

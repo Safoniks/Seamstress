@@ -3,7 +3,7 @@ from django.db import models
 
 class OperationType(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    category = models.ForeignKey('operationtypecategory.OperationTypeCategory')
+    category = models.ForeignKey('operationtypecategory.OperationTypeCategory', on_delete=models.PROTECT)
     duration = models.PositiveIntegerField()
     full_cost = models.FloatField(blank=True)
 

@@ -29,11 +29,25 @@ class ProductOperationListSerializer(serializers.ModelSerializer):
         return WorkerProfileSerializer(obj.worker_set.all(), many=True).data
 
     def validate_operation_type(self, value):
-        view = self.context['view']
-        product_id = view.kwargs.get('product_id')
-        type_id = value.id
+        product = self.context.get('product')
+        operation_type = value
 
-        operation = Operation.objects.filter(product_id=product_id, operation_type_id=type_id)
+        operation = Operation.objects.filter(product=product, operation_type=operation_type)
         if operation.exists():
             raise serializers.ValidationError('Already exist.')
+        return value
+
+
+class ProductOperationListUpdateSerializer(ProductOperationListSerializer):
+    class Meta:
+        model = Operation
+        fields = (
+            'id',
+            'type',
+            'operation_type',
+            'workers',
+        )
+        extra_kwargs = {'operation_type': {'write_only': True}}
+
+    def validate_operation_type(self, value):
         return value

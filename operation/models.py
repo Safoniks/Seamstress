@@ -3,7 +3,7 @@ from django.db import models
 
 class Operation(models.Model):
     product = models.ForeignKey('product.Product')
-    operation_type = models.ForeignKey('operationtype.OperationType')
+    operation_type = models.ForeignKey('operationtype.OperationType', on_delete=models.PROTECT)
 
     class Meta:
         db_table = 'operation'

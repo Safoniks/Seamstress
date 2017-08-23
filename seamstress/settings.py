@@ -70,7 +70,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.IsAdminUser',
     ),
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 3
 }
 
 JWT_AUTH = {

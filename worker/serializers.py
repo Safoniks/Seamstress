@@ -46,7 +46,6 @@ class WorkerListSerializer(serializers.ModelSerializer):
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
     brigade = BaseBrigadeSerializer(read_only=True)
-    brigade_id = serializers.ModelField(model_field=Worker()._meta.get_field('brigade'), write_only=True)
     operations = serializers.SerializerMethodField()
 
     class Meta:
@@ -56,7 +55,6 @@ class WorkerListSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'brigade',
-            'brigade_id',
             'operations',
         )
 
@@ -81,6 +79,14 @@ class WorkerUpdateSerializer(serializers.ModelSerializer):
             'last_name',
             'brigade',
         )
+        extra_kwargs = {'brigade': {
+            'default': None,
+            'required': False,
+            'allow_blank': True,
+        }}
+
+    def to_representation(self, instance):
+        return WorkerListSerializer(instance).data
 
     def update(self, instance, validated_data):
         first_name = validated_data.get('first_name')

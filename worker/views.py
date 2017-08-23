@@ -38,22 +38,6 @@ class WorkerDetail(RetrieveUpdateDestroyAPIView):
             return WorkerUpdateSerializer
         return WorkerListSerializer
 
-    def update(self, request, *args, **kwargs):
-        data = request.data
-        worker = self.worker
-        worker_serializer = WorkerUpdateSerializer(worker, data=data)
-        if worker_serializer.is_valid():
-            worker_serializer.save()
-            response_data = WorkerListSerializer(worker).data
-            return Response(response_data, status=HTTP_200_OK)
-        return Response(worker_serializer.errors, status=HTTP_400_BAD_REQUEST)
-
-    @property
-    def worker(self):
-        worker_id = self.kwargs.get(self.lookup_url_kwarg)
-        worker = get_object_or_404(Worker, id=worker_id)
-        return worker
-
 
 class WorkerOperationList(ListCreateAPIView):
     lookup_url_kwarg = 'worker_id'

@@ -19,6 +19,7 @@ class MyDateTimeField(serializers.DateTimeField):
 
 
 class WorkerGoalSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(default='')
     amount = serializers.FloatField(validators=[positive_number])
     start = MyDateTimeField(read_only=True)
     end = MyDateTimeField(validators=[future_date])
