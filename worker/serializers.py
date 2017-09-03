@@ -6,6 +6,8 @@ from brigade.models import Brigade
 from operation.models import Operation
 from public.models import Payroll
 
+from public.validators import positive_number
+
 from .models import Worker, WorkerOperation
 
 
@@ -82,7 +84,6 @@ class WorkerUpdateSerializer(serializers.ModelSerializer):
         extra_kwargs = {'brigade': {
             'default': None,
             'required': False,
-            'allow_blank': True,
         }}
 
     def to_representation(self, instance):
@@ -136,27 +137,15 @@ class WorkerOperationCreateSerializer(serializers.ModelSerializer):
 
 
 class PayrollCreateSerializer(serializers.Serializer):
-    workers = serializers.ListField(
-        child=serializers.IntegerField(),
-        write_only=True
-    )
-
-    def validate(self, attrs):
-        worker_ids = attrs.get('workers')
-        workers = Worker.objects.filter(pk__in=worker_ids)
-        if len(worker_ids) != workers.count():
-            raise serializers.ValidationError('Set existing workers please.')
-        return {'workers': workers}
+    paid = serializers.FloatField(validators=[positive_number])
 
     def create(self, validated_data):
-        payroll = None
-        workers = validated_data.get('workers')
-        current_time = timezone.now()
-        for worker in workers:
-            payroll = Payroll(
-                worker=worker,
-                salary=worker.get_period_done(field='cost'),
-                date=current_time
-            )
-            payroll.save()
+        worker = self.context['view'].worker
+        paid = validated_data.get('paid')
+        payroll = Payroll(
+            worker=worker,
+            paid=paid,
+            salary=worker.last_period_salary_with_debt,
+        )
+        payroll.save()
         return payroll

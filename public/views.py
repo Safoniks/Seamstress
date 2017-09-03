@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 from operation.models import Operation
 from public.models import WorkerTiming
 from user.permissions import IsAuthenticatedWorker
+from .permissions import IsActiveWorker, IsNotActiveWorker
 from worker.models import WorkerOperation
 from .serializers import (
     PublicOperationListSerializer,
@@ -20,7 +21,7 @@ from .serializers import (
     PublicWorkerDetailSerializer,
     PublicWorkerUpdateSerializer,
     TimerDetailSerializer,
-    RatingDoneDailySerializer,
+    RatingDurationDailySerializer,
     WorkerGoalSerializer,
 )
 
@@ -91,7 +92,7 @@ class PublicOperationDetail(RetrieveAPIView):
 class PublicOperationDone(CreateAPIView):
     # authentication_classes = (JSONWebTokenAuthentication,)
     serializer_class = PublicOperationDoneSerializer
-    permission_classes = [IsAuthenticatedWorker]
+    permission_classes = [IsAuthenticatedWorker, IsActiveWorker]
     lookup_url_kwarg = 'operation_id'
 
     def get_object(self):
@@ -137,16 +138,11 @@ class TimerDetail(GenericAPIView):
 
 class StartTimer(APIView):
     # authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = [IsAuthenticatedWorker]
+    permission_classes = [IsAuthenticatedWorker, IsNotActiveWorker]
 
     def post(self, request, *args, **kwargs):
-        worker = self.worker
-        if not worker.is_active:
-            worker.timer_do(WorkerTiming.START)
-            return Response(status=HTTP_200_OK)
-        return Response(data={
-            'detail': "Is working now."
-        }, status=HTTP_400_BAD_REQUEST)
+        self.worker.timer_do(WorkerTiming.START)
+        return Response(status=HTTP_200_OK)
 
     @property
     def worker(self):
@@ -155,16 +151,11 @@ class StartTimer(APIView):
 
 class StopTimer(APIView):
     # authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = [IsAuthenticatedWorker]
+    permission_classes = [IsAuthenticatedWorker, IsActiveWorker]
 
     def post(self, request, *args, **kwargs):
-        worker = self.worker
-        if worker.is_active:
-            worker.timer_do(WorkerTiming.STOP)
-            return Response(status=HTTP_200_OK)
-        return Response(data={
-            'detail': "Does not working now."
-        }, status=HTTP_400_BAD_REQUEST)
+        self.worker.timer_do(WorkerTiming.STOP)
+        return Response(status=HTTP_200_OK)
 
     @property
     def worker(self):
@@ -173,15 +164,15 @@ class StopTimer(APIView):
 
 class ResetTimer(APIView):
     # authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = [IsAuthenticatedWorker]
+    permission_classes = [IsAuthenticatedWorker, IsNotActiveWorker]
 
     def post(self, request, *args, **kwargs):
         worker = self.worker
-        if not worker.is_active:
+        if not worker.is_last_timing_reset:
             worker.timer_do(WorkerTiming.RESET)
             return Response(status=HTTP_200_OK)
         return Response(data={
-            'detail': "Is working now."
+            'detail': "Already reset."
         }, status=HTTP_400_BAD_REQUEST)
 
     @property
@@ -189,9 +180,9 @@ class ResetTimer(APIView):
         return self.request.user.worker
 
 
-class RatingDoneDaily(GenericAPIView):
+class RatingDurationDaily(GenericAPIView):
     # authentication_classes = (JSONWebTokenAuthentication,)
-    serializer_class = RatingDoneDailySerializer
+    serializer_class = RatingDurationDailySerializer
     permission_classes = [IsAuthenticatedWorker]
 
     def get_object(self):

@@ -22,7 +22,7 @@ class WorkerGoalSerializer(serializers.ModelSerializer):
     name = serializers.CharField(default='')
     amount = serializers.FloatField(validators=[positive_number])
     start = MyDateTimeField(read_only=True)
-    end = MyDateTimeField(validators=[future_date])
+    end = MyDateTimeField(read_only=True)
 
     class Meta:
         model = Goal
@@ -32,13 +32,14 @@ class WorkerGoalSerializer(serializers.ModelSerializer):
             'amount',
             'start',
             'end',
-            'tempo',
+            # 'tempo',
+            'prediction',
             'is_active',
         )
 
 
-class WorkerDoneDailySerializer(WorkerProfileSerializer):
-    done = serializers.SerializerMethodField()
+class WorkerDurationDailySerializer(WorkerProfileSerializer):
+    duration = serializers.SerializerMethodField()
 
     class Meta:
         model = Worker
@@ -46,23 +47,23 @@ class WorkerDoneDailySerializer(WorkerProfileSerializer):
             'id',
             'first_name',
             'last_name',
-            'done',
+            'duration',
         )
 
-    def get_done(self, obj):
-        return obj.daily_done
+    def get_duration(self, obj):
+        return obj.daily_done_duration
 
 
-class RatingDoneDailySerializer(serializers.Serializer):
+class RatingDurationDailySerializer(serializers.Serializer):
     my_position = serializers.SerializerMethodField()
     worker_list = serializers.SerializerMethodField()
 
     def get_my_position(self, obj):
-        return obj.get_rating_position_with(prop='daily_done')
+        return obj.get_rating_position_with(prop='daily_done_duration')
 
     def get_worker_list(self, obj):
-        workers = Worker.objects.all_ordered_by(prop='daily_done')
-        return WorkerDoneDailySerializer(workers, many=True).data
+        workers = Worker.objects.all_ordered_by(prop='daily_done_duration')
+        return WorkerDurationDailySerializer(workers, many=True).data
 
 
 class PublicWorkerUpdateSerializer(serializers.ModelSerializer):
@@ -109,7 +110,7 @@ class PublicOperationDoneSerializer(serializers.Serializer):
 
 
 class TimerDetailSerializer(serializers.ModelSerializer):
-    time_worked = serializers.DurationField(source='daily_time_worked')
+    time_worked = serializers.DurationField(source='last_reset_time_worked')
     last_reset = MyDateTimeField()
 
     class Meta:
@@ -160,12 +161,14 @@ class PublicWorkerDetailSerializer(serializers.ModelSerializer):
         return obj.brigade_name
 
     def get_daily_salary(self, obj):
-        return obj.daily_salary
+        return obj.last_reset_salary
 
     def get_last_period_salary(self, obj):
-        return obj.last_period_salary
+        return obj.last_period_salary_with_debt
 
     def get_goal(self, obj):
+        if not obj.goal:
+            return None
         return WorkerGoalSerializer(obj.goal).data
 
     def get_operations(self, obj):

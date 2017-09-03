@@ -81,5 +81,12 @@ class WorkerOperationDetail(RetrieveDestroyAPIView):
         return worker
 
 
-class PayrollToWorkers(CreateAPIView):
+class PayrollToWorker(CreateAPIView):
     serializer_class = PayrollCreateSerializer
+    lookup_url_kwarg = 'worker_id'
+
+    @property
+    def worker(self):
+        worker_id = self.kwargs.get(self.lookup_url_kwarg)
+        worker = get_object_or_404(Worker, id=worker_id)
+        return worker

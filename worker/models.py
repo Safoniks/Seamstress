@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.utils import timezone
 from django.db import models
@@ -18,15 +18,13 @@ class WorkerOperation(models.Model):
     def operation_done(self, amount):
         worker = self.worker
         product = self.operation.product
-        operation = self.operation
-        done_cost = operation.operation_type.full_cost * amount
+        operation_type = self.operation.operation_type
 
         worker_operation_log = WorkerOperationLogs(
             worker=worker,
-            operation=operation,
+            operation_type=operation_type,
             product=product,
             done=amount,
-            cost=done_cost,
         )
         worker_operation_log.save()
 
@@ -34,8 +32,8 @@ class WorkerOperation(models.Model):
 class Goal(models.Model):
     name = models.CharField(max_length=100, blank=True, default='')
     amount = models.FloatField()
-    start = models.DateTimeField(auto_now_add=True)
-    end = models.DateTimeField()
+    start = models.DateTimeField(blank=True)
+    end = models.DateTimeField(blank=True)
 
     class Meta:
         db_table = 'goal'
@@ -45,18 +43,28 @@ class Goal(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        self.start = timezone.now()
+        self.end = timezone.now() + timedelta(days=7)
+        super(Goal, self).save(*args, **kwargs)
+
     @property
     def is_active(self):
         return self.end > timezone.now()
 
     @property
     def tempo(self):
-        until = timezone.now() if self.is_active else self.end
+        # until = timezone.now() if self.is_active else self.end
+        until = timezone.now()
         return self.worker.get_tempo_in_interval(since=self.start, until=until)
+
+    @property
+    def prediction(self):
+        return round(self.tempo * 40, 2)
 
 
 class WorkerManager(models.Manager):
-    def all_ordered_by(self, prop='daily_done'):
+    def all_ordered_by(self, prop='last_reset_done'):
         workers = Worker.objects.all()
         return sorted(workers, key=lambda worker: getattr(worker, prop), reverse=True)
 
@@ -80,8 +88,13 @@ class Worker(models.Model):
     @property
     def interval(self):
         current_time = timezone.now()
+        midnight = datetime(current_time.year, current_time.month, current_time.day, tzinfo=timezone.get_current_timezone())
         return {
             'DAILY': {
+                'since': midnight,
+                'until': current_time,
+            },
+            'LAST_RESET': {
                 'since': self.last_reset,
                 'until': current_time,
             },
@@ -124,6 +137,10 @@ class Worker(models.Model):
         return WorkerOperationLogs.objects.filter(worker=self)
 
     @property
+    def is_last_timing_reset(self):
+        return self.timings.last().action == WorkerTiming.RESET
+
+    @property
     def last_reset(self):
         last_reset = self.timings.filter(action=WorkerTiming.RESET).last()
         return last_reset.date if last_reset else self.user.date_joined
@@ -134,16 +151,20 @@ class Worker(models.Model):
         return last_payroll.date if last_payroll else self.user.date_joined
 
     @property
-    def daily_time_worked(self):
-        return self.get_time_worked_in_interval(**self.interval.get('DAILY'))
+    def daily_done_duration(self):
+        return self.get_done_in_interval(**self.interval.get('DAILY'), field='duration')
 
     @property
-    def daily_done(self):
-        return self.get_done_in_interval(**self.interval.get('DAILY'))
+    def last_reset_time_worked(self):
+        return self.get_time_worked_in_interval(**self.interval.get('LAST_RESET'))
 
     @property
-    def daily_salary(self):
-        return self.get_done_in_interval(**self.interval.get('DAILY'), field='cost')
+    def last_reset_done(self):
+        return self.get_done_in_interval(**self.interval.get('LAST_RESET'))
+
+    @property
+    def last_reset_salary(self):
+        return self.get_done_in_interval(**self.interval.get('LAST_RESET'), field='cost')
 
     @property
     def last_period_done(self):
@@ -154,6 +175,12 @@ class Worker(models.Model):
         return self.get_done_in_interval(**self.interval.get('LAST_PERIOD'), field='cost')
 
     @property
+    def last_period_salary_with_debt(self):
+        payrolls = self.payrolls.aggregate(total_paid=models.Sum('paid'))
+        debt = self.all_time_salary - (payrolls['total_paid'] or 0)
+        return round(debt, 2)
+
+    @property
     def all_time_done(self):
         return self.get_done_in_interval(**self.interval.get('ALL_TIME'))
 
@@ -161,32 +188,47 @@ class Worker(models.Model):
     def all_time_salary(self):
         return self.get_done_in_interval(**self.interval.get('ALL_TIME'), field='cost')
 
-    def get_time_worked_in_interval(self, since, until):
+    def get_time_worked_in_interval(self, since, until, with_pause=False):
         time_worked = timedelta()
         timings = self.timings.filter(date__gt=since, date__lt=until)
-        stop_timings = timings.filter(action=WorkerTiming.STOP)
-        start_timings = timings.filter(action=WorkerTiming.START)
 
-        first_timer = timings.first()
-        last_timer = timings.last()
-        first_is_stop = bool(first_timer) and first_timer.action == WorkerTiming.STOP
-        last_is_start = bool(last_timer) and last_timer.action == WorkerTiming.START
+        if timings:
+            stop_timings = timings.filter(action=WorkerTiming.STOP)
+            start_timings = timings.filter(action=WorkerTiming.START)
 
-        if start_timings.exists():
-            if last_is_start:
-                time_worked = until - first_timer.date
+            first_timer = timings.first()
+            last_timer = timings.last()
+            last_is_reset = last_timer.action == WorkerTiming.RESET
+            first_is_stop = first_timer.action == WorkerTiming.STOP
+            first_is_start = first_timer.action == WorkerTiming.START
+            last_is_start = last_timer.action == WorkerTiming.START
 
-                if not first_is_stop:
-                    start_timings = start_timings[1:]
+            if with_pause:
+                time_worked = until - since
                 for start_timing in start_timings:
-                    time_worked -= start_timing.delta
+                    if start_timing.is_prev_reset:
+                        if start_timing == first_timer:
+                            time_worked -= start_timing.date - since
+                        else:
+                            time_worked -= start_timing.delta
+                if last_is_reset:
+                    time_worked -= until - last_timer.date
             else:
-                if first_is_stop:
-                    stop_timings = stop_timings[1:]
-                for stop in stop_timings:
-                    time_worked += stop.delta
-        if first_is_stop:
-            time_worked += first_timer.date - since
+                if start_timings.exists():
+                    if last_is_start:
+                        time_worked = until - first_timer.date
+
+                        if first_is_start:
+                            start_timings = start_timings[1:]
+                        for start_timing in start_timings:
+                            time_worked -= start_timing.delta
+                    else:
+                        if first_is_stop:
+                            stop_timings = stop_timings[1:]
+                        for stop in stop_timings:
+                            time_worked += stop.delta
+                if not first_is_start:
+                    time_worked += first_timer.date - since
         return time_worked
 
     def get_done_in_interval(self, since, until, field='done', operation=None):
@@ -201,13 +243,12 @@ class Worker(models.Model):
 
     def get_tempo_in_interval(self, since, until, field='cost'):
         tempo_field = self.get_done_in_interval(since=since, until=until, field=field)
-        time_worked = self.get_time_worked_in_interval(since=since, until=until).seconds
-        print('worked', time_worked/60)
+        time_worked = self.get_time_worked_in_interval(since=since, until=until, with_pause=True).seconds
         if time_worked:
             return 60 * 60 * tempo_field / time_worked
         return 0
 
-    def get_rating_position_with(self, prop='daily_done'):
+    def get_rating_position_with(self, prop='last_reset_done'):
         workers = self.__class__.objects.all_ordered_by(prop=prop)
         for i, worker in enumerate(workers):
             if worker == self:

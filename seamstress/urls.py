@@ -41,8 +41,6 @@ def api_root(request, format=None):
         'workers': reverse('core:worker-list', request=request, format=format),
         'brigades': reverse('core:brigade-list', request=request, format=format),
 
-        'payroll-to-workers': reverse('core:worker-payroll', request=request, format=format),
-
         'public-worker': reverse('public:worker-detail', request=request, format=format),
         'public-worker-goal': reverse('public:worker-goal', request=request, format=format),
         'public-worker-rating': reverse('public:worker-rating', request=request, format=format),

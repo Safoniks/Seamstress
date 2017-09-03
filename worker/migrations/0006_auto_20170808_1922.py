@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='worker',
-            name='daily_salary',
+            name='last_reset_salary',
             field=models.FloatField(blank=True, default=0),
         ),
         migrations.AddField(

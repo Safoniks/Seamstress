@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='worker',
-            name='daily_done',
+            name='last_reset_done',
             field=models.PositiveIntegerField(blank=True, default=0),
         ),
     ]

@@ -14,11 +14,11 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RemoveField(
             model_name='worker',
-            name='daily_done',
+            name='last_reset_done',
         ),
         migrations.RemoveField(
             model_name='worker',
-            name='daily_salary',
+            name='last_reset_salary',
         ),
         migrations.RemoveField(
             model_name='worker',
