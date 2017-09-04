@@ -148,4 +148,6 @@ class PayrollCreateSerializer(serializers.Serializer):
             salary=worker.last_period_salary_with_debt,
         )
         payroll.save()
+
+        worker.goal and worker.goal.delete()
         return payroll

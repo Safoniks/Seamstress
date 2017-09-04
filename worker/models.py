@@ -2,6 +2,7 @@ from datetime import timedelta, datetime
 
 from django.utils import timezone
 from django.db import models
+from django.conf import settings
 
 from public.models import WorkerOperationLogs, WorkerTiming, Payroll
 
@@ -45,7 +46,7 @@ class Goal(models.Model):
 
     def save(self, *args, **kwargs):
         self.start = timezone.now()
-        self.end = timezone.now() + timedelta(days=7)
+        self.end = timezone.now() + timedelta(days=settings.APPLICATION_SETTINGS['salary_days'])
         super(Goal, self).save(*args, **kwargs)
 
     @property
@@ -60,7 +61,8 @@ class Goal(models.Model):
 
     @property
     def prediction(self):
-        return round(self.tempo * 40, 2)
+        salary_hours = settings.APPLICATION_SETTINGS['working_days'] * settings.APPLICATION_SETTINGS['working_hours']
+        return round(self.tempo * salary_hours, 2)
 
 
 class WorkerManager(models.Manager):
@@ -210,7 +212,7 @@ class Worker(models.Model):
                         if start_timing == first_timer:
                             time_worked -= start_timing.date - since
                         else:
-                            time_worked -= start_timing.delta
+                            time_worked -= start_timing.get_delta(with_reset=True)
                 if last_is_reset:
                     time_worked -= until - last_timer.date
             else:
@@ -221,12 +223,12 @@ class Worker(models.Model):
                         if first_is_start:
                             start_timings = start_timings[1:]
                         for start_timing in start_timings:
-                            time_worked -= start_timing.delta
+                            time_worked -= start_timing.get_delta()
                     else:
                         if first_is_stop:
                             stop_timings = stop_timings[1:]
                         for stop in stop_timings:
-                            time_worked += stop.delta
+                            time_worked += stop.get_delta()
                 if not first_is_start:
                     time_worked += first_timer.date - since
         return time_worked
@@ -244,6 +246,7 @@ class Worker(models.Model):
     def get_tempo_in_interval(self, since, until, field='cost'):
         tempo_field = self.get_done_in_interval(since=since, until=until, field=field)
         time_worked = self.get_time_worked_in_interval(since=since, until=until, with_pause=True).seconds
+        print('time', time_worked/60)
         if time_worked:
             return 60 * 60 * tempo_field / time_worked
         return 0

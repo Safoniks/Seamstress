@@ -8,3 +8,7 @@ urlpatterns = format_suffix_patterns([
     url(r'^technologist/$', views.TechnologistCreate.as_view(), name='register-technologist'),
     url(r'^director/$', views.DirectorCreate.as_view(), name='register-director'),
 ])
+
+settings_urlpatterns = format_suffix_patterns([
+    url(r'^$', views.Settings.as_view(), name='settings'),
+])

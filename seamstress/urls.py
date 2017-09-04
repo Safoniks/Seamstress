@@ -23,6 +23,7 @@ from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
+from user.urls import settings_urlpatterns
 from rest_framework_jwt.views import obtain_jwt_token
 
 
@@ -34,6 +35,8 @@ def api_root(request, format=None):
         'register-director': reverse('core:register-director', request=request, format=format),
         'login-admin': reverse('core:login-admin', request=request, format=format),
         'login-worker': reverse('public:login-worker', request=request, format=format),
+
+        'settings': reverse('core:settings', request=request, format=format),
 
         'products': reverse('core:product-list', request=request, format=format),
         'operation-types': reverse('core:operation-type-list', request=request, format=format),
@@ -59,6 +62,8 @@ core_urlpatterns = [
     url(r'^operation-type-category/', include('operationtypecategory.urls')),
     url(r'^worker/', include('worker.urls')),
     url(r'^brigade/', include('brigade.urls')),
+
+    url(r'^settings/', include(settings_urlpatterns)),
 
     url(r'^register/', include('user.urls')),
     url(r'^login/$', obtain_jwt_token, name='login-admin'),

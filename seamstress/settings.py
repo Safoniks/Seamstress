@@ -163,3 +163,18 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 PRODUCT_PHOTOS_DIR_NAME = 'product-photos'
+
+APPLICATION_SETTINGS = {
+    'salary_days': 7,
+    'working_days': 5,
+    'working_hours': 8,
+}
+
+
+
+# from datetime import date,timedelta
+# fromdate = date(2013,3, 1)
+# todate = date(2013,3,16)
+# daygenerator = (fromdate + timedelta(x) for x in range((todate - fromdate).days + 1))
+# res = sum(1 for day in daygenerator if day.weekday() < 5)
+# print(res)

@@ -44,26 +44,38 @@ class WorkerTiming(models.Model):
         verbose_name_plural = 'worker timings'
         ordering = ['date']
 
-    @property
-    def delta(self):
+    def get_next(self, queryset):
+        next = queryset.filter(date__gt=self.date)
+        if next:
+            return next.first()
+        return False
+
+    def get_prev(self, queryset):
+        prev = queryset.filter(date__lt=self.date).order_by('-date')
+        if prev:
+            return prev.first()
+        return False
+
+    def get_delta(self, with_reset=False):
         current_time = self.date
+        worker_timings = self.worker.timings
         try:
             prev_timing = self
             while True:
-                prev_timing = prev_timing.get_previous_by_date()
-                if prev_timing.action != self.RESET:
+                prev_timing = prev_timing.get_prev(queryset=worker_timings)
+                if with_reset or prev_timing.action != self.RESET:
                     break
         except:
             prev_timing = None
-
         return current_time - prev_timing.date if prev_timing else timedelta()
 
     @property
     def is_prev_reset(self):
+        worker_timings = self.worker.timings
         try:
-            prev_timing = self.get_previous_by_date().action
-        except:
-            prev_timing = None
+            prev_timing = self.get_prev(queryset=worker_timings).action
+        except AttributeError:
+            return True
         return prev_timing == self.RESET
 
 
