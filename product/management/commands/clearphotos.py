@@ -1,17 +1,11 @@
 import os
 
 from django.conf import settings
-
 from django.core.management.base import BaseCommand, CommandError
 
+from utils import remove_empty_sub_dirs
+
 from product.models import ProductPhoto
-
-
-def remove_empty_sub_dirs(dir_path):
-    sub_dirs = os.listdir(dir_path)
-    for sub_dir in sub_dirs:
-        sub_dir_path = os.path.join(dir_path, sub_dir)
-        not os.listdir(sub_dir_path) and os.rmdir(sub_dir_path)
 
 
 class Command(BaseCommand):

@@ -6,7 +6,7 @@ from operationtype.models import OperationType
 
 
 @receiver(post_save, sender=OperationTypeCategory)
-def create_worker(sender, instance, created, **kwargs):
+def update_operation_type(sender, instance, created, **kwargs):
     if not created:
         category = instance
         operation_types = OperationType.objects.filter(category=category)

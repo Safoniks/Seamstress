@@ -18,6 +18,9 @@ from .serializers import (
     ProductPhotosUpdateSerializer,
 )
 
+from .email import ProductEmailMessage
+from .tasks import send_product_mail
+
 
 class ProductList(ListCreateAPIView):
     queryset = Product.objects.all()
@@ -68,6 +71,8 @@ class ProductList(ListCreateAPIView):
                 product_serializer_errors.update(operations_serializer.errors)
 
         if is_valid:
+            product_email_message = ProductEmailMessage(request.method, product)
+            send_product_mail.delay(*product_email_message.args_mail)
             return Response(serialized_product, status=HTTP_201_CREATED)
         else:
             product and product.delete()
@@ -82,9 +87,12 @@ class ProductDetail(RetrieveUpdateDestroyAPIView):
     def update(self, request, *args, **kwargs):
         data = request.data
         product = self.product
-        serializer_context = {'product': product}
         new_photos = request.data.get('photos', [])
         new_operations = request.data.get('operations', [])
+        product_email_message = ProductEmailMessage(request.method, product)
+        serializer_context = {
+            'product': product,
+        }
 
         product_serializer = ProductSerializer(product, data=data)
         photos_serializer = ProductPhotosUpdateSerializer(
@@ -110,12 +118,22 @@ class ProductDetail(RetrieveUpdateDestroyAPIView):
             serialized_product = product_serializer.data
             serialized_product['photos'] = photos_serializer.context['photos']
             serialized_product['operations'] = operations_serializer.context['operations']
+
+            product_email_message.add_product_changes()
+            send_product_mail.delay(*product_email_message.args_mail)
             return Response(serialized_product, status=HTTP_201_CREATED)
         else:
             product_serializer_errors = product_serializer.errors
             product_serializer_errors.update(photos_serializer.errors)
             product_serializer_errors.update(operations_serializer.errors)
             return Response(product_serializer_errors, status=HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        product = self.product
+        product_email_message = ProductEmailMessage(request.method, product)
+        ret = super(ProductDetail, self).destroy(request, *args, **kwargs)
+        send_product_mail.delay(*product_email_message.args_mail)
+        return ret
 
     @property
     def product(self):

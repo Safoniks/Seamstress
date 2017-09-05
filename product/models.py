@@ -64,6 +64,10 @@ class Product(models.Model):
         return ProductPhoto.active_objects.filter(product=self)
 
     @property
+    def all_photos(self):
+        return ProductPhoto.objects.filter(product=self)
+
+    @property
     def operations(self):
         return Operation.objects.filter(product=self)
 

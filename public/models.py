@@ -65,7 +65,7 @@ class WorkerTiming(models.Model):
                 prev_timing = prev_timing.get_prev(queryset=worker_timings)
                 if with_reset or prev_timing.action != self.RESET:
                     break
-        except:
+        except AttributeError:
             prev_timing = None
         return current_time - prev_timing.date if prev_timing else timedelta()
 

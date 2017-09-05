@@ -2,6 +2,15 @@ from django.contrib.auth.models import User, BaseUserManager
 
 
 class MyUserManager(BaseUserManager):
+    def all_directors(self, **kwargs):
+        return self.get_queryset().filter(is_superuser=True, is_staff=True)
+
+    def all_technologists(self, **kwargs):
+        return self.get_queryset().filter(is_superuser=False, is_staff=True)
+
+    def all_workers(self, **kwargs):
+        return self.get_queryset().filter(is_superuser=False, is_staff=False)
+
     def new_user(self, **kwargs):
         password = kwargs.pop('password')
         user = self.model(**kwargs)

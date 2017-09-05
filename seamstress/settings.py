@@ -164,17 +164,33 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 PRODUCT_PHOTOS_DIR_NAME = 'product-photos'
 
+
+# REDIS related settings
+REDIS_HOST = 'localhost'
+REDIS_PORT = '6379'
+BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+# EMAIL_FILE_PATH = 'tmp/product_messages/'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'valera.safonik@gmail.com'
+EMAIL_HOST_PASSWORD = ''
+
+SERVER_EMAIL = 'root@localhost'
+DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+
+
+
 APPLICATION_SETTINGS = {
     'salary_days': 7,
-    'working_days': 5,
     'working_hours': 8,
 }
-
-
-
-# from datetime import date,timedelta
-# fromdate = date(2013,3, 1)
-# todate = date(2013,3,16)
-# daygenerator = (fromdate + timedelta(x) for x in range((todate - fromdate).days + 1))
-# res = sum(1 for day in daygenerator if day.weekday() < 5)
-# print(res)

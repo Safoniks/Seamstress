@@ -83,7 +83,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class SettingsSerializer(serializers.Serializer):
     salary_days = serializers.IntegerField(validators=[positive_number])
-    working_days = serializers.IntegerField(validators=[positive_number])
     working_hours = serializers.IntegerField(validators=[positive_number])
 
     def create(self, validated_data):

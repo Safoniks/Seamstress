@@ -34,7 +34,7 @@ class ProductPhotosCreateSerializer(serializers.Serializer):
             photo = ProductPhoto.objects.create(
                 photo=img,
                 product=product,
-                active=True,
+                active=False,
                 **validated_data
             )
             photos.append(photo)
@@ -64,7 +64,7 @@ class ProductPhotosUpdateSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         context = self.context
         product = context.get('product')
-        all_photos = ProductPhoto.objects.filter(product=product)
+        all_photos = product.all_photos
         old_photos = instance
         new_photos = validated_data.get('photos')
 

@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.db import models
 from django.conf import settings
 
+from utils import get_working_days, is_working_day
+
 from public.models import WorkerOperationLogs, WorkerTiming, Payroll
 
 
@@ -60,9 +62,16 @@ class Goal(models.Model):
         return self.worker.get_tempo_in_interval(since=self.start, until=until)
 
     @property
+    def default_salary_hours(self):
+        return get_working_days(self.start, self.end) * settings.APPLICATION_SETTINGS['working_hours']
+
+    @property
     def prediction(self):
-        salary_hours = settings.APPLICATION_SETTINGS['working_days'] * settings.APPLICATION_SETTINGS['working_hours']
-        return round(self.tempo * salary_hours, 2)
+        return round(self.tempo * self.default_salary_hours, 2)
+
+'''
+Якщо день робочий то ----  якщо (reset minus first_start) > working_hours то ---
+'''
 
 
 class WorkerManager(models.Manager):
@@ -245,8 +254,8 @@ class Worker(models.Model):
 
     def get_tempo_in_interval(self, since, until, field='cost'):
         tempo_field = self.get_done_in_interval(since=since, until=until, field=field)
-        time_worked = self.get_time_worked_in_interval(since=since, until=until, with_pause=True).seconds
-        print('time', time_worked/60)
+        time_worked = self.get_time_worked_in_interval(since=since, until=until, with_pause=True).total_seconds()
+        print('time', time_worked/60/60)
         if time_worked:
             return 60 * 60 * tempo_field / time_worked
         return 0
