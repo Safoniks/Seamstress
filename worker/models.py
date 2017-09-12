@@ -10,7 +10,11 @@ from public.models import WorkerOperationLogs, WorkerTiming, Payroll
 
 
 class WorkerOperation(models.Model):
-    worker = models.ForeignKey('worker.Worker')
+    """
+    I am docstring
+    """
+
+    worker = models.ForeignKey('worker.Worker')  #: I am reference to worker instance
     operation = models.ForeignKey('operation.Operation')
 
     class Meta:
@@ -238,8 +242,6 @@ class Worker(models.Model):
                     for start_timing in start_timings:
                         if start_timing.is_prev_reset:
                             if start_timing == first_timer:
-                                if start_timing == last_timer:
-                                    time_worked -= until - timezone.now()
                                 time_worked -= start_timing.date - since
                             else:
                                 time_worked -= start_timing.get_delta(with_reset=True)
@@ -247,6 +249,8 @@ class Worker(models.Model):
                         time_worked -= until - last_timer.date
                 if not first_is_start:
                     time_worked += first_timer.date - since
+                if not last_is_reset:
+                    time_worked -= until - timezone.now()
             else:
                 if start_timings.exists():
                     if last_is_start:
@@ -283,7 +287,7 @@ class Worker(models.Model):
     def get_tempo_in_interval(self, since, until, field='cost'):
         tempo_field = self.get_done_in_interval(since=since, until=until, field=field)
         time_worked = self.get_time_worked_in_interval(since=since, until=until, with_pause=True).total_seconds()
-        print('goal hours', time_worked/60/60)
+        print('tempo goal hours', time_worked/60/60)
         if time_worked:
             return tempo_field / time_worked
         return 0

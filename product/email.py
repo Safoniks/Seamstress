@@ -55,16 +55,16 @@ class ProductEmailMessage:
 
     def _parse_product(self):
         template = '''
-        {separator}
-        Name: {product_name}
-        Description: {product_description}
+{separator}
+Name: {product_name}
+Description: {product_description}
 
-        Photos: {product_photos}
+Photos: {product_photos}
 
-        Operations: {product_operations}
-        {separator}
+Operations: {product_operations}
+{separator}
 
-        '''
+'''
         product = self.product
         separator = 'PRODUCT'.center(70, '-')
         product_name = product.name
