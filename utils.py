@@ -6,9 +6,19 @@ def is_working_day(day):
     return day.weekday() < 5
 
 
-def get_working_days(fromdate, todate):
-    daygenerator = (fromdate + timedelta(x) for x in range((todate - fromdate).days + 1))
-    res = sum(1 for day in daygenerator if day.weekday() < 5)
+def day_generator(fromdate, todate):
+    return (fromdate + timedelta(x) for x in range((todate - fromdate).days))
+
+
+def get_working_days(*args):
+    days = day_generator(*args)
+    working_days = (day for day in days if day.weekday() < 5)
+    return working_days
+
+
+def get_working_days_amount(*args):
+    working_days = get_working_days(*args)
+    res = sum(1 for day in working_days)
     return res
 
 
