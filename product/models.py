@@ -5,6 +5,7 @@ from django.db import models
 from django.conf import settings
 
 from operation.models import Operation
+from simple_history.models import HistoricalRecords
 
 
 def get_image_path(instance, filename):
@@ -20,6 +21,7 @@ class ProductPhoto(models.Model):
     product = models.ForeignKey('product.Product', related_name='product_photos')
     photo = models.ImageField(upload_to=get_image_path, null=True, blank=True)
     active = models.BooleanField(blank=True, default=False)
+    history = HistoricalRecords(table_name='product_photo_history')
 
     objects = models.Manager()
     active_objects = ProductPhotoManager()
@@ -50,6 +52,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, default='')
     operations = models.ManyToManyField('operationtype.OperationType', through='operation.Operation')
+    history = HistoricalRecords(table_name='product_history')
 
     class Meta:
         db_table = 'product'

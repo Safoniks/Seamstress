@@ -1,0 +1,2149 @@
+[
+{
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+        "name": "NEW",
+        "permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$fEWM04653zTV$r3j7iuUhuZKCCB+A6la954EIGVKUnP4+AcRYsipTgKQ=",
+        "last_login": "2017-08-22T11:46:32.231Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "valera.safonik@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-07-28T14:00:07.202Z",
+        "groups": [
+            [
+                "NEW"
+            ]
+        ],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 27,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$vREdttfcch0Q$5XQsFqYRCn2rjLokJQULvsxHM7o0y47DVNEQjW/Y7zM=",
+        "last_login": "2017-09-03T13:55:12.261Z",
+        "is_superuser": false,
+        "username": "valera",
+        "first_name": "Valera",
+        "last_name": "Safonik",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-08-04T11:51:26.262Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 30,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$znRskQAgsEnh$2of5iHpu1A0OZjnp6r6KMAqzO3L6/6An9lErtZfn3X4=",
+        "last_login": "2017-08-19T14:34:24.456Z",
+        "is_superuser": false,
+        "username": "vasya",
+        "first_name": "Vasya",
+        "last_name": "Pupkin",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-08-09T12:38:03.284Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 39,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$pvCXREuv5WPw$QUakJHDOJEtGkYKKrTLFhDMEfzSR6UW+u0KKVLwa7EY=",
+        "last_login": "2017-09-12T13:13:48.058Z",
+        "is_superuser": false,
+        "username": "technologist",
+        "first_name": "\u041b\u044c\u043e\u0445\u0430",
+        "last_name": "\u0422\u0443\u043d\u0434\u0440\u0430",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-08-22T11:44:27.446Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 40,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$gYFHUFEeWXl5$hz7oGix9OjaUxte0O+9bFRmJ1XMbY6G5Fz/n7ACsKKE=",
+        "last_login": "2017-09-12T14:15:29.261Z",
+        "is_superuser": true,
+        "username": "director",
+        "first_name": "\u042d\u0440\u043d\u0435\u0441\u0442",
+        "last_name": "\u0425\u0435\u043c\u0438\u043d\u0433\u0443\u044d\u0439",
+        "email": "ernest.hemingway@director.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-08-22T11:49:46.399Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 41,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$1mjWByaEfZ4a$2s5cRh9wq3puiGZPYADL92CYSbK1XuDArZ5RBLE0Pow=",
+        "last_login": "2017-09-12T13:38:01.151Z",
+        "is_superuser": false,
+        "username": "lena",
+        "first_name": "Lena",
+        "last_name": "Golovach",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-08-22T11:51:50.101Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 45,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$e6ItnAwmLOLG$xwukMwCvB9qiomrE7dQMp51WvAWoNcHv0J6zsfZqb24=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "awdawd",
+        "first_name": "qwewqeqweqw",
+        "last_name": "werewr",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-09-12T13:16:38.805Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 46,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$fPVrt75LIRtr$FpcOYYRAmYsX7FNhjqkxh55VSpRKPsRzZA2zJX/wj1s=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "qwe",
+        "first_name": "qwe",
+        "last_name": "qwe",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-09-14T15:33:54.702Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 47,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$AxpDVttLs88e$fp6VTGhZjlK5h3dOSzFXMpCEGPPQPNlHGdrwH8qHK/0=",
+        "last_login": null,
+        "is_superuser": true,
+        "username": "new",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-09-15T08:20:19.591Z",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "2hqp8eincltthuh2hjbu93uzz52m6eiz",
+    "fields": {
+        "session_data": "ODY4MzBmNTNmZGI2ODlkYzcxOTk4NzVkN2Y1NjQzNWE2NTcxMmQwZDp7Il9hdXRoX3VzZXJfaGFzaCI6ImJiNmQ0MzZjYmMwYzhiZTA1NjhkNTUyYTEwYjkzMDE3MTA0ZTE4YWMiLCJfYXV0aF91c2VyX2lkIjoiNDAiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCJ9",
+        "expire_date": "2017-09-25T10:27:59.181Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "37vtd80ioc0nizrgjzwki3tcfrz9fg61",
+    "fields": {
+        "session_data": "N2EyM2FjNDNiM2JiMTc0ZjAwMTYzOWE2N2Q2MjZjNmIzMzE1MWYzOTp7Il9hdXRoX3VzZXJfaWQiOiIyNyIsIl9hdXRoX3VzZXJfaGFzaCI6ImJjNDgyODk4MmM4YWM1MTE0NjBmOTVlNWY3MWQ3NzJkZmY5MjRmMTMiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCJ9",
+        "expire_date": "2017-08-31T13:44:21.920Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "hlmsefwfsfpmmlef2omw9nnwrxjoisxd",
+    "fields": {
+        "session_data": "YTAyMTEzZDg4YmFiOGEzYWJkOGY0ZWQ3NzZlMzYyOGJiZTRkNDY2Mzp7Il9hdXRoX3VzZXJfaGFzaCI6ImJiNmQ0MzZjYmMwYzhiZTA1NjhkNTUyYTEwYjkzMDE3MTA0ZTE4YWMiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiI0MCJ9",
+        "expire_date": "2017-09-17T12:36:18.028Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "jzjoke008jboh5kytf3v82wtsor3044q",
+    "fields": {
+        "session_data": "MDY2ODZmYjIyZTU1N2U4MGNhYjg1YmMxMWYwN2ExYzdlY2ZkMjM3Zjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6IjI3IiwiX2F1dGhfdXNlcl9oYXNoIjoiYmM0ODI4OTgyYzhhYzUxMTQ2MGY5NWU1ZjcxZDc3MmRmZjkyNGYxMyJ9",
+        "expire_date": "2017-09-16T17:08:55.577Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "lqt9qh848tlwl2oo4w650gcqv79gnxyr",
+    "fields": {
+        "session_data": "YzA0ZDExMDI1MGM4ZTA3ZjZmOGNiODI2Mzc2OGRhNDk5Nzg3M2ZlZDp7Il9hdXRoX3VzZXJfaGFzaCI6IjEyMTQzMjg4ODk1MmY5YTBmOTdmNTBiMjkyNDUwMTk5ZWI0MWU3MzciLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=",
+        "expire_date": "2017-09-05T08:58:07.087Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "q81cw2eqb180bv34pcbqkmlfkngevhaf",
+    "fields": {
+        "session_data": "MDkzNzQzZWViNzFiMTk5NTNlYTkxYTgzNzZiYWZmZmY5NWJjYjdjMTp7Il9hdXRoX3VzZXJfaWQiOiIyNyIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiYmM0ODI4OTgyYzhhYzUxMTQ2MGY5NWU1ZjcxZDc3MmRmZjkyNGYxMyJ9",
+        "expire_date": "2017-09-14T18:26:48.172Z"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "uo0dhiyygnsjcn75i4lwb0sradwm41ya",
+    "fields": {
+        "session_data": "YzA1ZWE5NmNmZTg1OTU2MTI1ZGVhMWQxMzY0MzQ3MDVlNjkzNGIzMDp7Il9hdXRoX3VzZXJfaWQiOiI0MCIsIl9hdXRoX3VzZXJfaGFzaCI6ImJiNmQ0MzZjYmMwYzhiZTA1NjhkNTUyYTEwYjkzMDE3MTA0ZTE4YWMiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCJ9",
+        "expire_date": "2017-09-26T14:15:29.264Z"
+    }
+},
+{
+    "model": "product.historicalproduct",
+    "pk": 1,
+    "fields": {
+        "id": 53,
+        "name": "Dress",
+        "description": "Old",
+        "history_date": "2017-09-15T11:32:53.474Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "product.historicalproduct",
+    "pk": 2,
+    "fields": {
+        "id": 55,
+        "name": "Shorts",
+        "description": "New",
+        "history_date": "2017-09-15T11:32:53.474Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "product.historicalproduct",
+    "pk": 3,
+    "fields": {
+        "id": 185,
+        "name": "BODYA",
+        "description": "HUY",
+        "history_date": "2017-09-15T11:32:53.474Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "product.product",
+    "pk": 53,
+    "fields": {
+        "name": "Dress",
+        "description": "Old"
+    }
+},
+{
+    "model": "product.product",
+    "pk": 55,
+    "fields": {
+        "name": "Shorts",
+        "description": "New"
+    }
+},
+{
+    "model": "product.product",
+    "pk": 185,
+    "fields": {
+        "name": "BODYA",
+        "description": "HUY"
+    }
+},
+{
+    "model": "operation.historicaloperation",
+    "pk": 1,
+    "fields": {
+        "id": 180,
+        "product": 185,
+        "operation_type": 2,
+        "history_date": "2017-09-15T11:32:53.467Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "operation.historicaloperation",
+    "pk": 2,
+    "fields": {
+        "id": 181,
+        "product": 185,
+        "operation_type": 3,
+        "history_date": "2017-09-15T11:32:53.467Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "operation.historicaloperation",
+    "pk": 3,
+    "fields": {
+        "id": 30,
+        "product": 53,
+        "operation_type": 2,
+        "history_date": "2017-09-15T11:32:53.467Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "operation.historicaloperation",
+    "pk": 4,
+    "fields": {
+        "id": 31,
+        "product": 53,
+        "operation_type": 3,
+        "history_date": "2017-09-15T11:32:53.467Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "operation.historicaloperation",
+    "pk": 5,
+    "fields": {
+        "id": 33,
+        "product": 55,
+        "operation_type": 4,
+        "history_date": "2017-09-15T11:32:53.467Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "operation.historicaloperation",
+    "pk": 6,
+    "fields": {
+        "id": 34,
+        "product": 55,
+        "operation_type": 3,
+        "history_date": "2017-09-15T11:32:53.467Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "operation.historicaloperation",
+    "pk": 7,
+    "fields": {
+        "id": 35,
+        "product": 53,
+        "operation_type": 4,
+        "history_date": "2017-09-15T11:32:53.467Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "operation.operation",
+    "pk": 30,
+    "fields": {
+        "product": 53,
+        "operation_type": 2
+    }
+},
+{
+    "model": "operation.operation",
+    "pk": 31,
+    "fields": {
+        "product": 53,
+        "operation_type": 3
+    }
+},
+{
+    "model": "operation.operation",
+    "pk": 33,
+    "fields": {
+        "product": 55,
+        "operation_type": 4
+    }
+},
+{
+    "model": "operation.operation",
+    "pk": 34,
+    "fields": {
+        "product": 55,
+        "operation_type": 3
+    }
+},
+{
+    "model": "operation.operation",
+    "pk": 35,
+    "fields": {
+        "product": 53,
+        "operation_type": 4
+    }
+},
+{
+    "model": "operation.operation",
+    "pk": 180,
+    "fields": {
+        "product": 185,
+        "operation_type": 2
+    }
+},
+{
+    "model": "operation.operation",
+    "pk": 181,
+    "fields": {
+        "product": 185,
+        "operation_type": 3
+    }
+},
+{
+    "model": "operationtype.historicaloperationtype",
+    "pk": 1,
+    "fields": {
+        "id": 2,
+        "name": "Stitching",
+        "duration": 20,
+        "category": 1,
+        "history_date": "2017-09-15T11:32:53.453Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "operationtype.historicaloperationtype",
+    "pk": 2,
+    "fields": {
+        "id": 4,
+        "name": "Zipper insertion",
+        "duration": 66,
+        "category": 1,
+        "history_date": "2017-09-15T11:32:53.453Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "operationtype.historicaloperationtype",
+    "pk": 3,
+    "fields": {
+        "id": 3,
+        "name": "Cut-out",
+        "duration": 88,
+        "category": 1,
+        "history_date": "2017-09-15T11:32:53.453Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "operationtype.operationtype",
+    "pk": 2,
+    "fields": {
+        "name": "Stitching",
+        "category": 1,
+        "duration": 20
+    }
+},
+{
+    "model": "operationtype.operationtype",
+    "pk": 3,
+    "fields": {
+        "name": "Cut-out",
+        "category": 1,
+        "duration": 88
+    }
+},
+{
+    "model": "operationtype.operationtype",
+    "pk": 4,
+    "fields": {
+        "name": "Zipper insertion",
+        "category": 1,
+        "duration": 66
+    }
+},
+{
+    "model": "operationtypecategory.historicaloperationtypecategory",
+    "pk": 1,
+    "fields": {
+        "id": 2,
+        "name": "Hard",
+        "cost_per_second": 66.0,
+        "history_date": "2017-09-15T11:32:53.479Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "operationtypecategory.historicaloperationtypecategory",
+    "pk": 2,
+    "fields": {
+        "id": 3,
+        "name": "Medium",
+        "cost_per_second": 30.0,
+        "history_date": "2017-09-15T11:32:53.479Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "operationtypecategory.historicaloperationtypecategory",
+    "pk": 3,
+    "fields": {
+        "id": 1,
+        "name": "Easy",
+        "cost_per_second": 5.0,
+        "history_date": "2017-09-15T11:32:53.480Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "operationtypecategory.operationtypecategory",
+    "pk": 1,
+    "fields": {
+        "name": "Easy",
+        "cost_per_second": 5.0
+    }
+},
+{
+    "model": "operationtypecategory.operationtypecategory",
+    "pk": 2,
+    "fields": {
+        "name": "Hard",
+        "cost_per_second": 66.0
+    }
+},
+{
+    "model": "operationtypecategory.operationtypecategory",
+    "pk": 3,
+    "fields": {
+        "name": "Medium",
+        "cost_per_second": 30.0
+    }
+},
+{
+    "model": "worker.historicalworkeroperation",
+    "pk": 1,
+    "fields": {
+        "id": 19,
+        "worker": 2,
+        "operation": 30,
+        "history_date": "2017-09-15T11:32:53.485Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "worker.historicalworkeroperation",
+    "pk": 2,
+    "fields": {
+        "id": 20,
+        "worker": 2,
+        "operation": 31,
+        "history_date": "2017-09-15T11:32:53.485Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "worker.historicalworkeroperation",
+    "pk": 3,
+    "fields": {
+        "id": 21,
+        "worker": 2,
+        "operation": 35,
+        "history_date": "2017-09-15T11:32:53.485Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "worker.historicalworkeroperation",
+    "pk": 4,
+    "fields": {
+        "id": 23,
+        "worker": 11,
+        "operation": 30,
+        "history_date": "2017-09-15T11:32:53.485Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "worker.historicalworkeroperation",
+    "pk": 5,
+    "fields": {
+        "id": 24,
+        "worker": 11,
+        "operation": 33,
+        "history_date": "2017-09-15T11:32:53.485Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "worker.historicalworkeroperation",
+    "pk": 6,
+    "fields": {
+        "id": 25,
+        "worker": 11,
+        "operation": 31,
+        "history_date": "2017-09-15T11:32:53.485Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "worker.historicalworkeroperation",
+    "pk": 7,
+    "fields": {
+        "id": 13,
+        "worker": 2,
+        "operation": 33,
+        "history_date": "2017-09-15T11:32:53.485Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "worker.historicalworkeroperation",
+    "pk": 8,
+    "fields": {
+        "id": 14,
+        "worker": 2,
+        "operation": 34,
+        "history_date": "2017-09-15T11:32:53.485Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "worker.workeroperation",
+    "pk": 13,
+    "fields": {
+        "worker": 2,
+        "operation": 33
+    }
+},
+{
+    "model": "worker.workeroperation",
+    "pk": 14,
+    "fields": {
+        "worker": 2,
+        "operation": 34
+    }
+},
+{
+    "model": "worker.workeroperation",
+    "pk": 19,
+    "fields": {
+        "worker": 2,
+        "operation": 30
+    }
+},
+{
+    "model": "worker.workeroperation",
+    "pk": 20,
+    "fields": {
+        "worker": 2,
+        "operation": 31
+    }
+},
+{
+    "model": "worker.workeroperation",
+    "pk": 21,
+    "fields": {
+        "worker": 2,
+        "operation": 35
+    }
+},
+{
+    "model": "worker.workeroperation",
+    "pk": 23,
+    "fields": {
+        "worker": 11,
+        "operation": 30
+    }
+},
+{
+    "model": "worker.workeroperation",
+    "pk": 24,
+    "fields": {
+        "worker": 11,
+        "operation": 33
+    }
+},
+{
+    "model": "worker.workeroperation",
+    "pk": 25,
+    "fields": {
+        "worker": 11,
+        "operation": 31
+    }
+},
+{
+    "model": "worker.goal",
+    "pk": 10,
+    "fields": {
+        "name": "New",
+        "amount": 555.0,
+        "start": "2017-08-21T13:33:14.457Z",
+        "end": "2017-08-21T14:00:00Z"
+    }
+},
+{
+    "model": "worker.goal",
+    "pk": 11,
+    "fields": {
+        "name": "",
+        "amount": 50.0,
+        "start": "2017-08-31T18:27:08.482Z",
+        "end": "2017-09-02T00:11:00Z"
+    }
+},
+{
+    "model": "worker.goal",
+    "pk": 14,
+    "fields": {
+        "name": "NYYYY",
+        "amount": 600.0,
+        "start": "2017-09-12T13:55:42.808Z",
+        "end": "2017-09-19T13:55:42.808Z"
+    }
+},
+{
+    "model": "user.historicalmyuser",
+    "pk": 1,
+    "fields": {
+        "id": 1,
+        "password": "pbkdf2_sha256$36000$fEWM04653zTV$r3j7iuUhuZKCCB+A6la954EIGVKUnP4+AcRYsipTgKQ=",
+        "last_login": "2017-08-22T11:46:32.231Z",
+        "is_superuser": true,
+        "username": "admin",
+        "first_name": "",
+        "last_name": "",
+        "email": "valera.safonik@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-07-28T14:00:07.202Z",
+        "history_date": "2017-09-15T11:44:14.208Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "user.historicalmyuser",
+    "pk": 2,
+    "fields": {
+        "id": 39,
+        "password": "pbkdf2_sha256$36000$pvCXREuv5WPw$QUakJHDOJEtGkYKKrTLFhDMEfzSR6UW+u0KKVLwa7EY=",
+        "last_login": "2017-09-12T13:13:48.058Z",
+        "is_superuser": false,
+        "username": "technologist",
+        "first_name": "\u041b\u044c\u043e\u0445\u0430",
+        "last_name": "\u0422\u0443\u043d\u0434\u0440\u0430",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-08-22T11:44:27.446Z",
+        "history_date": "2017-09-15T11:44:14.208Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "user.historicalmyuser",
+    "pk": 3,
+    "fields": {
+        "id": 45,
+        "password": "pbkdf2_sha256$36000$e6ItnAwmLOLG$xwukMwCvB9qiomrE7dQMp51WvAWoNcHv0J6zsfZqb24=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "awdawd",
+        "first_name": "qwewqeqweqw",
+        "last_name": "werewr",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-09-12T13:16:38.805Z",
+        "history_date": "2017-09-15T11:44:14.208Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "user.historicalmyuser",
+    "pk": 4,
+    "fields": {
+        "id": 41,
+        "password": "pbkdf2_sha256$36000$1mjWByaEfZ4a$2s5cRh9wq3puiGZPYADL92CYSbK1XuDArZ5RBLE0Pow=",
+        "last_login": "2017-09-12T13:38:01.151Z",
+        "is_superuser": false,
+        "username": "lena",
+        "first_name": "Lena",
+        "last_name": "Golovach",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-08-22T11:51:50.101Z",
+        "history_date": "2017-09-15T11:44:14.208Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "user.historicalmyuser",
+    "pk": 5,
+    "fields": {
+        "id": 40,
+        "password": "pbkdf2_sha256$36000$gYFHUFEeWXl5$hz7oGix9OjaUxte0O+9bFRmJ1XMbY6G5Fz/n7ACsKKE=",
+        "last_login": "2017-09-12T14:15:29.261Z",
+        "is_superuser": true,
+        "username": "director",
+        "first_name": "\u042d\u0440\u043d\u0435\u0441\u0442",
+        "last_name": "\u0425\u0435\u043c\u0438\u043d\u0433\u0443\u044d\u0439",
+        "email": "ernest.hemingway@director.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-08-22T11:49:46.399Z",
+        "history_date": "2017-09-15T11:44:14.208Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "user.historicalmyuser",
+    "pk": 6,
+    "fields": {
+        "id": 46,
+        "password": "pbkdf2_sha256$36000$fPVrt75LIRtr$FpcOYYRAmYsX7FNhjqkxh55VSpRKPsRzZA2zJX/wj1s=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "qwe",
+        "first_name": "qwe",
+        "last_name": "qwe",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-09-14T15:33:54.702Z",
+        "history_date": "2017-09-15T11:44:14.208Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "user.historicalmyuser",
+    "pk": 7,
+    "fields": {
+        "id": 47,
+        "password": "pbkdf2_sha256$36000$AxpDVttLs88e$fp6VTGhZjlK5h3dOSzFXMpCEGPPQPNlHGdrwH8qHK/0=",
+        "last_login": null,
+        "is_superuser": true,
+        "username": "new",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2017-09-15T08:20:19.591Z",
+        "history_date": "2017-09-15T11:44:14.208Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "user.historicalmyuser",
+    "pk": 8,
+    "fields": {
+        "id": 30,
+        "password": "pbkdf2_sha256$36000$znRskQAgsEnh$2of5iHpu1A0OZjnp6r6KMAqzO3L6/6An9lErtZfn3X4=",
+        "last_login": "2017-08-19T14:34:24.456Z",
+        "is_superuser": false,
+        "username": "vasya",
+        "first_name": "Vasya",
+        "last_name": "Pupkin",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-08-09T12:38:03.284Z",
+        "history_date": "2017-09-15T11:44:14.208Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "user.historicalmyuser",
+    "pk": 9,
+    "fields": {
+        "id": 27,
+        "password": "pbkdf2_sha256$36000$vREdttfcch0Q$5XQsFqYRCn2rjLokJQULvsxHM7o0y47DVNEQjW/Y7zM=",
+        "last_login": "2017-09-03T13:55:12.261Z",
+        "is_superuser": false,
+        "username": "valera",
+        "first_name": "Valera",
+        "last_name": "Safonik",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-08-04T11:51:26.262Z",
+        "history_date": "2017-09-15T11:44:14.208Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "brigade.historicalbrigade",
+    "pk": 1,
+    "fields": {
+        "id": 7,
+        "name": "qwe",
+        "history_date": "2017-09-15T10:25:16.632Z",
+        "history_change_reason": null,
+        "history_user": [
+            "director"
+        ],
+        "history_type": "+"
+    }
+},
+{
+    "model": "brigade.historicalbrigade",
+    "pk": 2,
+    "fields": {
+        "id": 7,
+        "name": "qqq",
+        "history_date": "2017-09-15T10:26:07.599Z",
+        "history_change_reason": null,
+        "history_user": [
+            "director"
+        ],
+        "history_type": "~"
+    }
+},
+{
+    "model": "brigade.brigade",
+    "pk": 1,
+    "fields": {
+        "name": "New"
+    }
+},
+{
+    "model": "brigade.brigade",
+    "pk": 3,
+    "fields": {
+        "name": "Best"
+    }
+},
+{
+    "model": "brigade.brigade",
+    "pk": 4,
+    "fields": {
+        "name": "Fired"
+    }
+},
+{
+    "model": "brigade.brigade",
+    "pk": 5,
+    "fields": {
+        "name": "1111"
+    }
+},
+{
+    "model": "brigade.brigade",
+    "pk": 6,
+    "fields": {
+        "name": "11115555"
+    }
+},
+{
+    "model": "brigade.brigade",
+    "pk": 7,
+    "fields": {
+        "name": "qqq"
+    }
+},
+{
+    "model": "public.workeroperationlogs",
+    "pk": 27,
+    "fields": {
+        "worker": 2,
+        "operation_type": 3,
+        "product": 53,
+        "done": 6,
+        "cost": 2640.0,
+        "duration": 528,
+        "created": "2017-09-03T14:59:47.464Z"
+    }
+},
+{
+    "model": "public.workeroperationlogs",
+    "pk": 28,
+    "fields": {
+        "worker": 11,
+        "operation_type": 3,
+        "product": 53,
+        "done": 2,
+        "cost": 880.0,
+        "duration": 176,
+        "created": "2017-09-03T21:09:58.758Z"
+    }
+},
+{
+    "model": "public.workeroperationlogs",
+    "pk": 29,
+    "fields": {
+        "worker": 11,
+        "operation_type": 2,
+        "product": 53,
+        "done": 1,
+        "cost": 100.0,
+        "duration": 20,
+        "created": "2017-09-11T10:33:55.615Z"
+    }
+},
+{
+    "model": "public.workeroperationlogs",
+    "pk": 30,
+    "fields": {
+        "worker": 11,
+        "operation_type": 2,
+        "product": 53,
+        "done": 1,
+        "cost": 100.0,
+        "duration": 20,
+        "created": "2017-09-12T12:19:31.703Z"
+    }
+},
+{
+    "model": "public.workeroperationlogs",
+    "pk": 31,
+    "fields": {
+        "worker": 11,
+        "operation_type": 4,
+        "product": 55,
+        "done": 1,
+        "cost": 330.0,
+        "duration": 66,
+        "created": "2017-09-12T13:48:45.742Z"
+    }
+},
+{
+    "model": "public.workeroperationlogs",
+    "pk": 32,
+    "fields": {
+        "worker": 11,
+        "operation_type": 3,
+        "product": 53,
+        "done": 1,
+        "cost": 440.0,
+        "duration": 88,
+        "created": "2017-09-12T13:54:35.058Z"
+    }
+},
+{
+    "model": "public.workeroperationlogs",
+    "pk": 33,
+    "fields": {
+        "worker": 11,
+        "operation_type": 2,
+        "product": 53,
+        "done": 1,
+        "cost": 100.0,
+        "duration": 20,
+        "created": "2017-09-12T13:57:44.182Z"
+    }
+},
+{
+    "model": "public.workeroperationlogs",
+    "pk": 34,
+    "fields": {
+        "worker": 11,
+        "operation_type": 4,
+        "product": 55,
+        "done": 10,
+        "cost": 3300.0,
+        "duration": 660,
+        "created": "2017-09-12T14:02:12.410Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 30,
+    "fields": {
+        "worker": 2,
+        "action": "stop",
+        "date": "2017-08-14T14:44:49.437Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 31,
+    "fields": {
+        "worker": 2,
+        "action": "start",
+        "date": "2017-08-14T14:44:59.504Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 32,
+    "fields": {
+        "worker": 2,
+        "action": "stop",
+        "date": "2017-08-14T14:46:14.187Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 33,
+    "fields": {
+        "worker": 2,
+        "action": "reset",
+        "date": "2017-08-14T14:46:22.177Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 34,
+    "fields": {
+        "worker": 2,
+        "action": "start",
+        "date": "2017-08-15T11:14:34.012Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 35,
+    "fields": {
+        "worker": 2,
+        "action": "stop",
+        "date": "2017-08-15T11:22:03.012Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 36,
+    "fields": {
+        "worker": 2,
+        "action": "start",
+        "date": "2017-08-15T11:49:32.136Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 37,
+    "fields": {
+        "worker": 2,
+        "action": "stop",
+        "date": "2017-08-15T11:49:51.161Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 38,
+    "fields": {
+        "worker": 2,
+        "action": "reset",
+        "date": "2017-08-15T11:50:12.831Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 39,
+    "fields": {
+        "worker": 2,
+        "action": "start",
+        "date": "2017-08-15T11:50:37.317Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 40,
+    "fields": {
+        "worker": 2,
+        "action": "stop",
+        "date": "2017-08-15T11:50:54.110Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 41,
+    "fields": {
+        "worker": 2,
+        "action": "reset",
+        "date": "2017-08-15T11:51:03.335Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 42,
+    "fields": {
+        "worker": 5,
+        "action": "reset",
+        "date": "2017-08-15T11:53:31.122Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 43,
+    "fields": {
+        "worker": 5,
+        "action": "start",
+        "date": "2017-08-15T11:53:46.133Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 44,
+    "fields": {
+        "worker": 5,
+        "action": "stop",
+        "date": "2017-08-15T11:54:28.316Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 45,
+    "fields": {
+        "worker": 5,
+        "action": "reset",
+        "date": "2017-08-15T11:54:34.548Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 46,
+    "fields": {
+        "worker": 5,
+        "action": "reset",
+        "date": "2017-08-15T11:54:41.374Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 52,
+    "fields": {
+        "worker": 2,
+        "action": "start",
+        "date": "2017-08-15T12:54:06.280Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 53,
+    "fields": {
+        "worker": 2,
+        "action": "stop",
+        "date": "2017-08-15T12:54:40.258Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 55,
+    "fields": {
+        "worker": 5,
+        "action": "start",
+        "date": "2017-08-21T11:02:31.477Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 56,
+    "fields": {
+        "worker": 5,
+        "action": "stop",
+        "date": "2017-08-21T13:44:21.356Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 57,
+    "fields": {
+        "worker": 5,
+        "action": "start",
+        "date": "2017-08-21T14:13:48.081Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 58,
+    "fields": {
+        "worker": 5,
+        "action": "stop",
+        "date": "2017-08-21T14:18:55.033Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 59,
+    "fields": {
+        "worker": 5,
+        "action": "reset",
+        "date": "2017-08-21T14:19:26.332Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 60,
+    "fields": {
+        "worker": 5,
+        "action": "start",
+        "date": "2017-08-21T14:20:03.783Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 61,
+    "fields": {
+        "worker": 5,
+        "action": "stop",
+        "date": "2017-08-21T14:47:30.115Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 62,
+    "fields": {
+        "worker": 5,
+        "action": "start",
+        "date": "2017-08-21T14:58:30.869Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 63,
+    "fields": {
+        "worker": 5,
+        "action": "stop",
+        "date": "2017-08-21T14:59:07.671Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 64,
+    "fields": {
+        "worker": 5,
+        "action": "reset",
+        "date": "2017-08-21T14:59:25.963Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 65,
+    "fields": {
+        "worker": 5,
+        "action": "reset",
+        "date": "2017-08-21T14:59:36.893Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 66,
+    "fields": {
+        "worker": 5,
+        "action": "start",
+        "date": "2017-08-21T14:59:49.234Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 67,
+    "fields": {
+        "worker": 2,
+        "action": "reset",
+        "date": "2017-09-02T17:14:58.961Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 68,
+    "fields": {
+        "worker": 2,
+        "action": "start",
+        "date": "2017-09-03T14:33:18.804Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 69,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-03T21:09:34.105Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 70,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-03T21:16:14.370Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 71,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-03T21:16:52.750Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 72,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-04T09:19:26.975Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 73,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-04T09:22:43.112Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 74,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-04T09:22:55.322Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 75,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-04T09:23:16.557Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 76,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-04T09:44:47.634Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 77,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-04T09:45:07.791Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 78,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-04T09:45:23.710Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 79,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-04T09:49:02.522Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 80,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-04T09:49:17.021Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 81,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-04T09:49:36.758Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 82,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-04T09:51:11.920Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 83,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-04T09:51:23.722Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 84,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-04T09:51:40.205Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 85,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-04T09:52:18.008Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 86,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-04T09:52:23.742Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 87,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-04T09:54:25.071Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 88,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-04T09:55:16.798Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 89,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-04T09:55:33.197Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 90,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-04T09:55:50.540Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 91,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-04T10:09:21.415Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 92,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-04T10:09:33.977Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 93,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-04T10:10:49.122Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 94,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-04T10:47:44.915Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 95,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-04T10:47:58.108Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 96,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-04T10:48:26.359Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 97,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-04T10:49:44.518Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 98,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-04T10:50:31.697Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 99,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-04T10:52:06.187Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 100,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-04T11:05:23.532Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 101,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-04T11:05:35.774Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 102,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-04T11:05:51.044Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 103,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-11T14:49:16.082Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 104,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-11T14:49:23.011Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 105,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-12T09:31:41.196Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 117,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-12T10:57:36.181Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 118,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-12T10:57:58.424Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 119,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-12T12:19:24.186Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 120,
+    "fields": {
+        "worker": 11,
+        "action": "stop",
+        "date": "2017-09-12T13:52:01.389Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 121,
+    "fields": {
+        "worker": 11,
+        "action": "reset",
+        "date": "2017-09-12T13:52:18.046Z"
+    }
+},
+{
+    "model": "public.workertiming",
+    "pk": 122,
+    "fields": {
+        "worker": 11,
+        "action": "start",
+        "date": "2017-09-12T13:54:19.072Z"
+    }
+},
+{
+    "model": "public.payroll",
+    "pk": 23,
+    "fields": {
+        "worker": 2,
+        "paid": 200.0,
+        "salary": 10609.72,
+        "date": "2017-09-02T16:58:53.481Z"
+    }
+},
+{
+    "model": "public.payroll",
+    "pk": 24,
+    "fields": {
+        "worker": 2,
+        "paid": 200.0,
+        "salary": 0.0,
+        "date": "2017-09-02T16:59:21.277Z"
+    }
+},
+{
+    "model": "public.payroll",
+    "pk": 25,
+    "fields": {
+        "worker": 2,
+        "paid": 200.0,
+        "salary": 10209.72,
+        "date": "2017-09-02T20:01:23.699Z"
+    }
+},
+{
+    "model": "public.payroll",
+    "pk": 26,
+    "fields": {
+        "worker": 2,
+        "paid": 11111.0,
+        "salary": 10009.72,
+        "date": "2017-09-02T20:01:47.500Z"
+    }
+},
+{
+    "model": "public.payroll",
+    "pk": 27,
+    "fields": {
+        "worker": 11,
+        "paid": 500.0,
+        "salary": 880.0,
+        "date": "2017-09-11T10:28:46.760Z"
+    }
+},
+{
+    "model": "public.payroll",
+    "pk": 28,
+    "fields": {
+        "worker": 11,
+        "paid": 1000.0,
+        "salary": 910.0,
+        "date": "2017-09-12T13:51:04.064Z"
+    }
+},
+{
+    "model": "worker.worker",
+    "pk": 2,
+    "fields": {
+        "user": [
+            "valera"
+        ],
+        "goal": 11,
+        "brigade": 3
+    }
+},
+{
+    "model": "worker.worker",
+    "pk": 5,
+    "fields": {
+        "user": [
+            "vasya"
+        ],
+        "goal": 10,
+        "brigade": null
+    }
+},
+{
+    "model": "worker.worker",
+    "pk": 11,
+    "fields": {
+        "user": [
+            "lena"
+        ],
+        "goal": 14,
+        "brigade": 3
+    }
+},
+{
+    "model": "worker.worker",
+    "pk": 13,
+    "fields": {
+        "user": [
+            "awdawd"
+        ],
+        "goal": null,
+        "brigade": null
+    }
+},
+{
+    "model": "worker.historicalworker",
+    "pk": 1,
+    "fields": {
+        "id": 13,
+        "user": [
+            "awdawd"
+        ],
+        "goal": null,
+        "brigade": null,
+        "history_date": "2017-09-15T11:32:53.462Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "worker.historicalworker",
+    "pk": 2,
+    "fields": {
+        "id": 11,
+        "user": [
+            "lena"
+        ],
+        "goal": 14,
+        "brigade": 3,
+        "history_date": "2017-09-15T11:32:53.462Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "worker.historicalworker",
+    "pk": 3,
+    "fields": {
+        "id": 5,
+        "user": [
+            "vasya"
+        ],
+        "goal": 10,
+        "brigade": null,
+        "history_date": "2017-09-15T11:32:53.462Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "worker.historicalworker",
+    "pk": 4,
+    "fields": {
+        "id": 2,
+        "user": [
+            "valera"
+        ],
+        "goal": 11,
+        "brigade": 3,
+        "history_date": "2017-09-15T11:32:53.462Z",
+        "history_change_reason": null,
+        "history_user": null,
+        "history_type": ""
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+        "action_time": "2017-08-03T14:09:06.432Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "2",
+        "object_repr": "valera",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+        "action_time": "2017-08-03T14:21:54.747Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "2",
+        "object_repr": "valera",
+        "action_flag": 2,
+        "change_message": "[{\"changed\": {\"fields\": [\"is_superuser\"]}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+        "action_time": "2017-08-03T16:33:34.463Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "3",
+        "object_repr": "vasya",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+        "action_time": "2017-08-03T16:34:53.619Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "4",
+        "object_repr": "qweqweqweqwe",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+        "action_time": "2017-08-03T16:36:44.160Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "5",
+        "object_repr": "qqqqqqq",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+        "action_time": "2017-08-03T16:50:01.822Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "8",
+        "object_repr": "qfqwfqf",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+        "action_time": "2017-08-03T16:51:10.259Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "9",
+        "object_repr": "qwdqwdqwdwqdwqdwqdqwd",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 8,
+    "fields": {
+        "action_time": "2017-08-03T16:53:44.422Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "10",
+        "object_repr": "wqdqwdqwd",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 9,
+    "fields": {
+        "action_time": "2017-08-03T16:59:54.363Z",
+        "user": [
+            "admin"
+        ],
+        "content_type": [
+            "auth",
+            "user"
+        ],
+        "object_id": "13",
+        "object_repr": "petya",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+}
+]

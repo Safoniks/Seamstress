@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User, BaseUserManager
 
+from simple_history.models import HistoricalRecords
+
 
 class MyUserManager(BaseUserManager):
     def all_directors(self, **kwargs):
@@ -41,6 +43,8 @@ class MyUser(User):
     WORKER = 'worker'
     TECHNOLOGIST = 'technologist'
     DIRECTOR = 'director'
+
+    history = HistoricalRecords(table_name='user_history')
 
     objects = MyUserManager()
 

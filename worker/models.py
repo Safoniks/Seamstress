@@ -7,6 +7,7 @@ from django.conf import settings
 from utils import get_working_days, get_working_days_amount
 
 from public.models import WorkerOperationLogs, WorkerTiming, Payroll
+from simple_history.models import HistoricalRecords
 
 
 class WorkerOperation(models.Model):
@@ -16,6 +17,7 @@ class WorkerOperation(models.Model):
 
     worker = models.ForeignKey('worker.Worker')  #: I am reference to worker instance
     operation = models.ForeignKey('operation.Operation')
+    history = HistoricalRecords(table_name='worker_operation_history')
 
     class Meta:
         db_table = 'worker_operation'
@@ -92,7 +94,7 @@ class Goal(models.Model):
                     continue
                 salary_seconds += abnormality
 
-        print('prediction hours', salary_seconds/60/60)
+        # print('prediction hours', salary_seconds/60/60)
         return round(self.tempo * salary_seconds, 2)
 
 
@@ -107,6 +109,7 @@ class Worker(models.Model):
     goal = models.OneToOneField('worker.Goal', null=True, on_delete=models.SET_NULL)
     brigade = models.ForeignKey('brigade.Brigade', null=True, blank=True, on_delete=models.SET_NULL)
     worker_operations = models.ManyToManyField('operation.Operation', through='worker.WorkerOperation')
+    history = HistoricalRecords(table_name='worker_history')
 
     objects = WorkerManager()
 
@@ -287,7 +290,7 @@ class Worker(models.Model):
     def get_tempo_in_interval(self, since, until, field='cost'):
         tempo_field = self.get_done_in_interval(since=since, until=until, field=field)
         time_worked = self.get_time_worked_in_interval(since=since, until=until, with_pause=True).total_seconds()
-        print('tempo goal hours', time_worked/60/60)
+        # print('tempo goal hours', time_worked/60/60)
         if time_worked:
             return tempo_field / time_worked
         return 0

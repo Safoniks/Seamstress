@@ -37,9 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-
+    'simple_history',
     'rest_framework',
-
 
     'product.apps.ProductConfig',
     'operation.apps.OperationConfig',
@@ -74,12 +73,14 @@ REST_FRAMEWORK = {
 }
 
 JWT_AUTH = {
+    'JWT_ENCODE_HANDLER': 'rest_framework_jwt.utils.jwt_encode_handler',
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'custom_jwt.jwt_response_payload_handler',
     'JWT_PAYLOAD_HANDLER': 'custom_jwt.jwt_payload_handler',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=10)
 }
 
 MIDDLEWARE = [
+    'simple_history.middleware.HistoryRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -186,6 +187,12 @@ EMAIL_HOST_PASSWORD = ''
 
 SERVER_EMAIL = 'root@localhost'
 DEFAULT_FROM_EMAIL = 'webmaster@localhost'
+
+INITIAL_DIRECTOR = {
+    'username': 'director',
+    'password': 'director',
+    'email': 'director@director',
+}
 
 
 APPLICATION_SETTINGS = {
