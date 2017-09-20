@@ -100,5 +100,5 @@ ENV/
 
 # Rope project settings
 .ropeproject
-/media/
+media/
 /dump.rdb

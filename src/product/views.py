@@ -42,7 +42,7 @@ class ProductList(ListCreateAPIView):
             product = None
             serialized_product = {}
         product_serializer_errors = product_serializer.errors
-        serializer_context = {'product': product}
+        serializer_context = {'product': product, 'active_photo': True}
 
         if photos:
             photos_serializer = ProductPhotosCreateSerializer(
@@ -71,7 +71,7 @@ class ProductList(ListCreateAPIView):
                 product_serializer_errors.update(operations_serializer.errors)
 
         if is_valid:
-            product_email_message = ProductEmailMessage(request.method, product)
+            product_email_message = ProductEmailMessage(request, product)
             send_product_mail.delay(*product_email_message.args_mail)
             return Response(serialized_product, status=HTTP_201_CREATED)
         else:
@@ -89,7 +89,7 @@ class ProductDetail(RetrieveUpdateDestroyAPIView):
         product = self.product
         new_photos = request.data.get('photos', [])
         new_operations = request.data.get('operations', [])
-        product_email_message = ProductEmailMessage(request.method, product)
+        product_email_message = ProductEmailMessage(request, product)
         serializer_context = {
             'product': product,
         }
@@ -130,7 +130,7 @@ class ProductDetail(RetrieveUpdateDestroyAPIView):
 
     def destroy(self, request, *args, **kwargs):
         product = self.product
-        product_email_message = ProductEmailMessage(request.method, product)
+        product_email_message = ProductEmailMessage(request, product)
         ret = super(ProductDetail, self).destroy(request, *args, **kwargs)
         send_product_mail.delay(*product_email_message.args_mail)
         return ret
@@ -149,7 +149,7 @@ class ProductPhotoList(ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         photos = dict(request.FILES).get('photos')
-        serializer_context = {'product': self.product}
+        serializer_context = {'product': self.product, 'active_photo': False}
         photos_serializer = ProductPhotosCreateSerializer(data={'photos': photos}, context=serializer_context)
         if photos_serializer.is_valid():
             photos_serializer.save()

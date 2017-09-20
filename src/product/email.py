@@ -10,13 +10,14 @@ from product.models import Product
 class ProductEmailMessage:
     AVAILABLE_METHODS = ('POST', 'PUT', 'DELETE')
 
-    def __init__(self, method, product):
-        if method in self.AVAILABLE_METHODS:
-            self.method = method
+    def __init__(self, request, product):
+        if request.method in self.AVAILABLE_METHODS:
+            self.request = request
+            self.method = request.method
         else:
             raise TypeError(
                 'Method {method} is not supported. Available methods: {available_methods}.'.format(
-                    method=method,
+                    method=request.method,
                     available_methods=', '.join(self.AVAILABLE_METHODS)
                 )
             )
@@ -33,7 +34,7 @@ class ProductEmailMessage:
                 )
             )
 
-        self.subject = self._get_subject_templates().get(method)
+        self.subject = self._get_subject_templates().get(self.method)
         self.message = self._parse_product()
 
     @property
@@ -72,7 +73,7 @@ Operations: {product_operations}
 
         product_photos = '' if product.photos else None
         for photo in product.photos:
-            product_photos += '\n  * {}'.format(photo.path)
+            product_photos += '\n  * {}'.format(self.request.build_absolute_uri(photo.photo.url))
 
         product_operations = '' if product.operations else None
         for operation in product.operations:
@@ -107,10 +108,10 @@ Operations: {product_operations}
         updated_photos = updated_product.photos
         for photo in initial_photos:
             if photo not in updated_photos:
-                changes += 'REMOVED PHOTO {photo}\n'.format(photo=photo.path)
+                changes += 'REMOVED PHOTO {photo}\n'.format(photo=photo.photo.name)
         for photo in updated_photos:
             if photo not in initial_photos:
-                changes += 'ADDED NEW PHOTO {photo}\n'.format(photo=photo.path)
+                changes += 'ADDED NEW PHOTO {photo}\n'.format(photo=self.request.build_absolute_uri(photo.photo.url))
 
         initial_operations = self.initial_product_operations
         updated_operations = updated_product.operations

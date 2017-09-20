@@ -40,7 +40,7 @@ extensions = ['sphinx.ext.autodoc',
 import os
 import sys
 
-INCLUDE_PATH = os.path.abspath('../..')
+INCLUDE_PATH = os.path.abspath('../../src')
 sys.path.insert(0, INCLUDE_PATH)
 print('including source dir', INCLUDE_PATH)
 

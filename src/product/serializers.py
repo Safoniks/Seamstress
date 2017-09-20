@@ -28,13 +28,14 @@ class ProductPhotosCreateSerializer(serializers.Serializer):
         photos = []
         context = self.context
         product = context.get('product')
+        active_photo = context.get('active_photo')
         images = validated_data.pop('photos')
 
         for img in images:
             photo = ProductPhoto.objects.create(
                 photo=img,
                 product=product,
-                active=False,
+                active=active_photo,
                 **validated_data
             )
             photos.append(photo)
