@@ -1,3 +1,5 @@
+import jwt
+
 from django.utils import timezone
 from django.conf import settings
 
@@ -42,7 +44,6 @@ def jwt_response_payload_handler(token, user=None, request=None):
         })
 
 
-import jwt
 def create_token(user):
     payload = jwt_payload_handler(user)
     token = jwt.encode(payload, settings.SECRET_KEY)

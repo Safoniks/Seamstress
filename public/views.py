@@ -92,7 +92,7 @@ class PublicOperationDetail(RetrieveAPIView):
 class PublicOperationDone(CreateAPIView):
     # authentication_classes = (JSONWebTokenAuthentication,)
     serializer_class = PublicOperationDoneSerializer
-    permission_classes = [IsAuthenticatedWorker, IsActiveWorker]
+    permission_classes = (IsAuthenticatedWorker, IsActiveWorker, )
     lookup_url_kwarg = 'operation_id'
 
     def get_object(self):

@@ -9,6 +9,14 @@ from utils import remove_empty_sub_dirs
 
 from product.models import ProductPhoto
 
+__all__ = (
+    'send_product_mail',
+    'clear_photos'
+)
+
+
+logger = logging.getLogger(__name__)
+
 
 @app.task(bind=True, default_retry_delay=60, max_retries=5, ignore_result=True)
 def send_product_mail(self, *args):

@@ -14,23 +14,25 @@ class BrigadeViewTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
         director = MyUser.objects.create_director(
-            username='director', password='director'
+            username='test_director', password='test_director'
         )
         token = create_token(director)
         self.client.credentials(HTTP_AUTHORIZATION='JWT ' + token)
-        self.brigade_data = {'name': 'Lorem'}
-        self.response = self.client.post(
-            reverse('core:brigade-list'),
-            self.brigade_data,
-            format="json")
+        self.brigade = Brigade(name='QQQ')
+        self.brigade.save()
 
     def test_api_can_create_a_brigade(self):
         """Test the api has brigade creation capability."""
-        self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
+        response = self.client.post(
+            reverse('core:brigade-list'),
+            {'name': 'Lorem'},
+            format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_api_can_get_a_brigade(self):
         """Test the api can get a given brigade."""
-        brigade = Brigade.objects.get()
+        brigade = self.brigade
         response = self.client.get(
             reverse('core:brigade-detail', kwargs={'brigade_id': brigade.id}),
             format="json"
@@ -41,7 +43,7 @@ class BrigadeViewTestCase(TestCase):
 
     def test_api_can_update_brigade(self):
         """Test the api can update a given brigade."""
-        brigade = Brigade.objects.get()
+        brigade = self.brigade
         change_brigade = {'name': 'Something new'}
         response = self.client.put(
             reverse('core:brigade-detail', kwargs={'brigade_id': brigade.id}),
@@ -53,7 +55,7 @@ class BrigadeViewTestCase(TestCase):
 
     def test_api_can_delete_brigade(self):
         """Test the api can delete a brigade."""
-        brigade = Brigade.objects.get()
+        brigade = self.brigade
         response = self.client.delete(
             reverse('core:brigade-detail', kwargs={'brigade_id': brigade.id}),
             format='json',

@@ -25,7 +25,7 @@ SECRET_KEY = 'mj%gnq3$!28z9uwr2t(t^lxbdmhnp0t7f(*!o2!zs_b$2%ttja'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
 
     'simple_history',
     'rest_framework',
+    'rest_framework_swagger',
 
     'product.apps.ProductConfig',
     'operation.apps.OperationConfig',
@@ -66,8 +67,9 @@ REST_FRAMEWORK = {
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.IsAdminUser',
+        # 'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAdminUser',
+        'rest_framework.permissions.AllowAny',
     ),
     'PAGE_SIZE': 3
 }

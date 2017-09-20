@@ -1,18 +1,3 @@
-"""seamstress URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.11/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-"""
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls import url, include
@@ -23,8 +8,9 @@ from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
-from user.urls import settings_urlpatterns
 from rest_framework_jwt.views import obtain_jwt_token
+
+from user.urls import settings_urlpatterns
 
 
 @api_view(['GET'])
@@ -69,14 +55,41 @@ core_urlpatterns = [
     url(r'^login/$', obtain_jwt_token, name='login-admin'),
 ]
 
+from rest_framework.renderers import CoreJSONRenderer
+from rest_framework.schemas import get_schema_view
+from rest_framework_swagger.views import get_swagger_view
+from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
+
+# schema_view = get_schema_view(title='Users API', renderer_classes=[OpenAPIRenderer, SwaggerUIRenderer, CoreJSONRenderer])
+schema_view = get_swagger_view(title='Users API')
+
+
+
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.schemas import SchemaGenerator
+from rest_framework_swagger.renderers import OpenAPIRenderer, SwaggerUIRenderer
+
+
+# @api_view()
+# @permission_classes((AllowAny, ))
+# @renderer_classes([OpenAPIRenderer, SwaggerUIRenderer])
+# def schema_view(request):
+#     generator = SchemaGenerator(title='Rest Swagger')
+#     return Response(generator.get_schema(request=request))
+
+
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
-    url(r'^api/$', api_root),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
-    url(r'^api/core/', include(core_urlpatterns, namespace='core')),
-    url(r'^api/public/', include('public.urls', namespace='public')),
+    url(r'^api/v1/$', api_root),
+    url(r'^api/v1/schema/', schema_view),
+
+    url(r'^api/v1/core/', include(core_urlpatterns, namespace='core')),
+    url(r'^api/v1/public/', include('public.urls', namespace='public')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
