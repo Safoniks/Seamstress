@@ -1,7 +1,4 @@
-from django.conf.urls.static import static
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls import url, include
-from django.conf import settings
 from django.contrib import admin
 
 from rest_framework.decorators import api_view
@@ -9,6 +6,7 @@ from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
 from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_swagger.views import get_swagger_view
 
 from user.urls import settings_urlpatterns
 
@@ -55,42 +53,15 @@ core_urlpatterns = [
     url(r'^login/$', obtain_jwt_token, name='login-admin'),
 ]
 
-from rest_framework.renderers import CoreJSONRenderer
-from rest_framework.schemas import get_schema_view
-from rest_framework_swagger.views import get_swagger_view
-from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
-
-# schema_view = get_schema_view(title='Users API', renderer_classes=[OpenAPIRenderer, SwaggerUIRenderer, CoreJSONRenderer])
-schema_view = get_swagger_view(title='Users API')
-
-
-
-from rest_framework.decorators import api_view, permission_classes, renderer_classes
-from rest_framework.permissions import AllowAny
-from rest_framework.schemas import SchemaGenerator
-from rest_framework_swagger.renderers import OpenAPIRenderer, SwaggerUIRenderer
-
-
-# @api_view()
-# @permission_classes((AllowAny, ))
-# @renderer_classes([OpenAPIRenderer, SwaggerUIRenderer])
-# def schema_view(request):
-#     generator = SchemaGenerator(title='Rest Swagger')
-#     return Response(generator.get_schema(request=request))
-
-
 
 urlpatterns = [
+    url(r'^schema/', get_swagger_view(title='Seamstress API')),
+
     url(r'^admin/', admin.site.urls),
 
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^accounts/', include('rest_framework.urls', namespace='rest_framework')),
 
     url(r'^api/v1/$', api_root),
-    url(r'^api/v1/schema/', schema_view),
-
     url(r'^api/v1/core/', include(core_urlpatterns, namespace='core')),
     url(r'^api/v1/public/', include('public.urls', namespace='public')),
 ]
-
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += staticfiles_urlpatterns()

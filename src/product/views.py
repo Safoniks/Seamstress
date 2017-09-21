@@ -1,5 +1,3 @@
-from django.shortcuts import get_object_or_404
-
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -23,6 +21,11 @@ from .tasks import send_product_mail
 
 
 class ProductList(ListCreateAPIView):
+    """
+    API View that receives a POST with a user's username and password.
+
+    Returns a JSON Web Token that can be used for authenticated requests.
+    """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -80,6 +83,11 @@ class ProductList(ListCreateAPIView):
 
 
 class ProductDetail(RetrieveUpdateDestroyAPIView):
+    """
+    API View that receives a POST with a user's username and password.
+
+    Returns a JSON Web Token that can be used for authenticated requests.
+    """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_url_kwarg = 'product_id'
@@ -138,7 +146,7 @@ class ProductDetail(RetrieveUpdateDestroyAPIView):
     @property
     def product(self):
         product_id = self.kwargs.get(self.lookup_url_kwarg)
-        product = get_object_or_404(Product, id=product_id)
+        product = Product.objects.filter(id=product_id).first()
         return product
 
 
@@ -164,7 +172,7 @@ class ProductPhotoList(ListCreateAPIView):
     @property
     def product(self):
         product_id = self.kwargs.get(self.lookup_url_kwarg)
-        product = get_object_or_404(Product, id=product_id)
+        product = Product.objects.filter(id=product_id).first()
         return product
 
 

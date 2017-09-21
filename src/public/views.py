@@ -1,5 +1,4 @@
 from django.http import Http404
-from django.shortcuts import get_object_or_404
 from rest_framework.generics import (
     ListAPIView,
     RetrieveAPIView,
@@ -7,7 +6,13 @@ from rest_framework.generics import (
     GenericAPIView,
 )
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_201_CREATED, HTTP_204_NO_CONTENT
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_400_BAD_REQUEST,
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
+    HTTP_404_NOT_FOUND,
+)
 from rest_framework.views import APIView
 
 from operation.models import Operation
@@ -81,7 +86,7 @@ class PublicOperationDetail(RetrieveAPIView):
 
     def get_object(self):
         operation_id = self.kwargs.get(self.lookup_url_kwarg)
-        operation_obj = get_object_or_404(Operation, worker=self.worker, id=operation_id)
+        operation_obj = Operation.objects.filter(worker=self.worker, id=operation_id).first()
         return operation_obj
 
     @property
@@ -97,7 +102,7 @@ class PublicOperationDone(CreateAPIView):
 
     def get_object(self):
         operation_id = self.kwargs.get(self.lookup_url_kwarg)
-        operation_obj = get_object_or_404(Operation, worker=self.worker, id=operation_id)
+        operation_obj = Operation.objects.filter(worker=self.worker, id=operation_id).first()
         return operation_obj
 
     @property
@@ -109,11 +114,14 @@ class PublicOperationDone(CreateAPIView):
         done_serializer = PublicOperationDoneSerializer(data=data)
         if done_serializer.is_valid():
             amount = done_serializer.data.get('amount')
-            worker_operation = get_object_or_404(WorkerOperation, worker=self.worker, operation=self.get_object())
-            worker_operation.operation_done(amount)
+            worker_operation = WorkerOperation.objects.filter(worker=self.worker, operation=self.get_object()).first()
+            if worker_operation:
+                worker_operation.operation_done(amount)
 
-            worker_detail_response = PublicWorkerDetailSerializer(self.worker, context={'request': request}).data
-            return Response(worker_detail_response, status=HTTP_200_OK)
+                worker_detail_response = PublicWorkerDetailSerializer(self.worker, context={'request': request}).data
+                return Response(worker_detail_response, status=HTTP_200_OK)
+            else:
+                return Response(status=HTTP_404_NOT_FOUND)
         return Response(done_serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 

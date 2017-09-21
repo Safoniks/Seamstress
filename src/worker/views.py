@@ -1,5 +1,3 @@
-from django.shortcuts import get_object_or_404
-
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
 from rest_framework.generics import (
@@ -54,7 +52,7 @@ class WorkerOperationList(ListCreateAPIView):
     @property
     def worker(self):
         worker_id = self.kwargs.get(self.lookup_url_kwarg)
-        worker = get_object_or_404(Worker, id=worker_id)
+        worker = Worker.objects.filter(id=worker_id).first()
         return worker
 
 
@@ -66,7 +64,7 @@ class WorkerOperationDetail(RetrieveDestroyAPIView):
         worker_id = self.kwargs.get('worker_id')
         operation_id = self.kwargs.get('operation_id')
 
-        worker_operation = get_object_or_404(WorkerOperation, worker=worker_id, operation=operation_id)
+        worker_operation = WorkerOperation.objects.filter(worker=worker_id, operation=operation_id)
         worker_operation.delete()
         return Response(status=HTTP_204_NO_CONTENT)
 
@@ -77,7 +75,7 @@ class WorkerOperationDetail(RetrieveDestroyAPIView):
     @property
     def worker(self):
         worker_id = self.kwargs.get('worker_id')
-        worker = get_object_or_404(Worker, id=worker_id)
+        worker = Worker.objects.filter(id=worker_id).first()
         return worker
 
 
@@ -88,5 +86,5 @@ class PayrollToWorker(CreateAPIView):
     @property
     def worker(self):
         worker_id = self.kwargs.get(self.lookup_url_kwarg)
-        worker = get_object_or_404(Worker, id=worker_id)
+        worker = Worker.objects.filter(id=worker_id).first()
         return worker

@@ -3,7 +3,7 @@ import os
 
 from django.core.mail import send_mail
 from django.conf import settings
-from seamstress.celery import app
+from seamstress.celery import celery
 
 from utils import remove_empty_sub_dirs
 
@@ -18,7 +18,7 @@ __all__ = (
 logger = logging.getLogger(__name__)
 
 
-@app.task(bind=True, default_retry_delay=60, max_retries=5, ignore_result=True)
+@celery.task(bind=True, default_retry_delay=60, max_retries=5, ignore_result=True)
 def send_product_mail(self, *args):
     try:
         send_mail(*args, fail_silently=False)
@@ -27,7 +27,7 @@ def send_product_mail(self, *args):
         # logging.warning('Fail.')
 
 
-@app.task
+@celery.task
 def clear_photos():
     photos_dir_path = os.path.join(settings.MEDIA_ROOT, settings.PRODUCT_PHOTOS_DIR_NAME)
     inactive_photos = ProductPhoto.objects.filter(active=False)

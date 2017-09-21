@@ -1,5 +1,3 @@
-from django.shortcuts import get_object_or_404
-
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.generics import (
@@ -35,7 +33,7 @@ class ProductOperationList(ListCreateAPIView):
     @property
     def product(self):
         product_id = self.kwargs.get('product_id')
-        product = get_object_or_404(Product, id=product_id)
+        product = Product.objects.filter(id=product_id).first()
         return product
 
 
@@ -56,7 +54,7 @@ class OperationWorkerList(ListAPIView):
     @property
     def operation(self):
         operation_id = self.kwargs.get(self.lookup_url_kwarg)
-        operation = get_object_or_404(Operation, id=operation_id)
+        operation = Operation.objects.filter(id=operation_id).first()
         return operation
 
 
@@ -72,14 +70,14 @@ class OperationWorkerDetail(RetrieveDestroyAPIView):
         worker_id = self.kwargs.get('worker_id')
         operation_id = self.kwargs.get('operation_id')
 
-        worker_operation = get_object_or_404(WorkerOperation, worker=worker_id, operation=operation_id)
+        worker_operation = WorkerOperation.objects.filter(worker=worker_id, operation=operation_id).first()
         worker_operation.delete()
         return Response(status=HTTP_204_NO_CONTENT)
 
     @property
     def operation(self):
         operation_id = self.kwargs.get('operation_id')
-        operation = get_object_or_404(Operation, id=operation_id)
+        operation = Operation.objects.filter(id=operation_id).first()
         return operation
 
 

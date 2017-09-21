@@ -46,7 +46,7 @@ print('including source dir', INCLUDE_PATH)
 
 
 print('importing django')
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "seamstress.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "seamstress.settings.main")
 import django
 django.setup()
 # Add any paths that contain templates here, relative to this directory.
