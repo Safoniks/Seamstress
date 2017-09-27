@@ -21,9 +21,10 @@ RUN rm /etc/nginx/nginx.conf && \
   ln -s /app/config/nginx/seamstress.conf /etc/nginx/sites-enabled/seamstress.conf && \
   rm /etc/supervisor/supervisord.conf && \
   mkdir -p /app/data/logs && \
-  mkdir -p /app/data/media && \
+  mkdir -p /app/data/media/product-photos && \
   touch /app/data/logs/logfile.log
 
+RUN make -C /app/docs/ html
 RUN python /app/src/manage.py collectstatic --noinput
 
 ENV APP_MODE=web
@@ -38,15 +39,3 @@ CMD echo "Running with APP_MODE='$APP_MODE'; possible modes: web, celery"; \
     mkdir -p /app/data/media; \
     touch /app/data/logs/logfile.log; \
     supervisord -n -c /app/config/supervisord_$APP_MODE.conf
-
-
-#RUN ln -s /app/config/nginx/seamstress.conf /etc/nginx/sites-enabled/ &&\
-#
-#    chmod +x /app/django_init.sh
-#
-#ENTRYPOINT ["/app/django_init.sh"]
-#
-##ENV DJANGO_ENV=prod
-##ENV DOCKER_CONTAINER=1
-#
-#EXPOSE 8000

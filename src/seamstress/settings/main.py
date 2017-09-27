@@ -19,8 +19,6 @@ DATABASES = {
     }
 }
 
-
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +38,7 @@ INSTALLED_APPS = [
     'worker.apps.WorkerConfig',
     'user.apps.UserConfig',
     'brigade.apps.BrigadeConfig',
-    'public.apps.PublicConfig'
+    'public.apps.PublicConfig',
 ]
 
 
@@ -202,12 +200,6 @@ APPLICATION_SETTINGS = {
     'salary_days': 7,
     'working_hours': 8,
 }
-
-
-# if os.getenv('DJANGO_ENV') == 'prod':
-#     from .prod import *
-# else:
-#     from .dev import *
 
 try:
     print("Importing local settings")
