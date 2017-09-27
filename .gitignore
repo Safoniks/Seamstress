@@ -3,6 +3,10 @@ logs/
 .idea/
 tmp/
 static/
+data/
+src/seamstress/settings/local.py
+src/seamstress/settings/local.docker.py
+docker-compose.yml
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template

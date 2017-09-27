@@ -1,0 +1,7 @@
+data/
+media/
+logs/
+tmp/
+static/
+src/seamstress/settings/local.py
+src/seamstress/settings/local.docker.py

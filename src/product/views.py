@@ -22,9 +22,13 @@ from .tasks import send_product_mail
 
 class ProductList(ListCreateAPIView):
     """
-    API View that receives a POST with a user's username and password.
-
-    Returns a JSON Web Token that can be used for authenticated requests.
+    Product Create Example:
+    {
+      "name": "name",
+      "description": "description",
+      "photos": multiple files,
+      "operations": [{"operation_type": 1}, {"operation_type": 2}]
+    }
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -84,9 +88,13 @@ class ProductList(ListCreateAPIView):
 
 class ProductDetail(RetrieveUpdateDestroyAPIView):
     """
-    API View that receives a POST with a user's username and password.
-
-    Returns a JSON Web Token that can be used for authenticated requests.
+    Product Update Example:
+    {
+      "name": "name",
+      "description": "description",
+      "photos": [product_photo_id, product_photo_id],
+      "operations": [{"operation_type": 1}, {"operation_type": 2}]
+    }
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer

@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  postgres_db:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_PASSWORD=seamstress
+      - POSTGRES_USER=seamstress
+      - POSTGRES_DB=seamstress_db
+    networks:
+      - seamstress_net
+    volumes:
+      - ./data/pg_data:/var/lib/postgresql/data
+      - ./data/pg_backups:/pg_backups
+
+  redis_db:
+    image: redis
+    networks:
+      - seamstress_net
+
+  celery_ap:
+    build: .
+    environment:
+      - APP_MODE=celery
+    volumes:
+      - ./src/seamstress/settings/local.docker.py:/app/src/seamstress/settings/local.py:ro
+      - ./data/app:/app/data
+    networks:
+    - seamstress_net
+    healthcheck:
+      test: ["CMD", "PGPASSWORD=\"seamstress\"", "psql", "-h", "postgresql", "-U", "seamstress", "-c", "\"\\l\""]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  web_app:
+    build: .
+    environment:
+      - APP_MODE=web
+    volumes:
+      - ./src/seamstress/settings/local.docker.py:/app/src/seamstress/settings/local.py:ro
+      - ./data/app:/app/data
+    ports:
+      - "8080:80"
+    networks:
+    - seamstress_net
+    healthcheck:
+      test: ["CMD", "PGPASSWORD=\"seamstress\"", "psql", "-h", "postgresql", "-U", "seamstress", "-c", "\"\\l\""]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  seamstress_net:
+    driver: bridge
