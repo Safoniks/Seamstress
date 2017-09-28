@@ -15,6 +15,6 @@ celery.autodiscover_tasks(settings.INSTALLED_APPS)
 celery.conf.beat_schedule = {
     'clear-photos-every-single-minute': {
         'task': 'product.tasks.clear_photos',
-        'schedule': crontab(),  # crontab(minute=0, hour=0) daily at midnight
+        'schedule': crontab(minute=0, hour=0),
     },
 }

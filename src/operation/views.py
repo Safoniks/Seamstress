@@ -1,3 +1,5 @@
+from django.http import Http404
+
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.generics import (
@@ -21,6 +23,8 @@ class ProductOperationList(ListCreateAPIView):
     serializer_class = ProductOperationListSerializer
 
     def get_queryset(self):
+        if not self.product:
+            raise Http404
         queryset_list = Operation.objects.filter(product=self.product)
         return queryset_list
 
@@ -28,6 +32,8 @@ class ProductOperationList(ListCreateAPIView):
         return {'product': self.product}
 
     def perform_create(self, serializer):
+        if not self.product:
+            raise Http404
         serializer.save(product=self.product)
 
     @property
@@ -48,6 +54,8 @@ class OperationWorkerList(ListAPIView):
     lookup_url_kwarg = 'operation_id'
 
     def get_queryset(self):
+        if not self.operation:
+            raise Http404
         queryset_list = Worker.objects.filter(workeroperation__operation=self.operation)
         return queryset_list
 
@@ -63,6 +71,8 @@ class OperationWorkerDetail(RetrieveDestroyAPIView):
     lookup_url_kwarg = 'worker_id'
 
     def get_queryset(self):
+        if not self.operation:
+            raise Http404
         queryset_list = Worker.objects.filter(workeroperation__operation=self.operation)
         return queryset_list
 

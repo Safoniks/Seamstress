@@ -1,4 +1,4 @@
-from django.utils import timezone
+from django.http import Http404
 
 from rest_framework import serializers
 
@@ -141,6 +141,8 @@ class PayrollCreateSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         worker = self.context['view'].worker
+        if not worker:
+            raise Http404
         paid = validated_data.get('paid')
         payroll = Payroll(
             worker=worker,

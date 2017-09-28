@@ -1,3 +1,5 @@
+from django.http import Http404
+
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -101,6 +103,8 @@ class ProductDetail(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'product_id'
 
     def update(self, request, *args, **kwargs):
+        if not self.product:
+            raise Http404
         data = request.data
         product = self.product
         new_photos = request.data.get('photos', [])
@@ -145,6 +149,8 @@ class ProductDetail(RetrieveUpdateDestroyAPIView):
             return Response(product_serializer_errors, status=HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
+        if not self.product:
+            raise Http404
         product = self.product
         product_email_message = ProductEmailMessage(request, product)
         ret = super(ProductDetail, self).destroy(request, *args, **kwargs)
@@ -164,6 +170,8 @@ class ProductPhotoList(ListCreateAPIView):
     lookup_url_kwarg = 'product_id'
 
     def create(self, request, *args, **kwargs):
+        if not self.product:
+            raise Http404
         photos = dict(request.FILES).get('photos')
         serializer_context = {'product': self.product, 'active_photo': False}
         photos_serializer = ProductPhotosCreateSerializer(data={'photos': photos}, context=serializer_context)
@@ -174,6 +182,8 @@ class ProductPhotoList(ListCreateAPIView):
         return Response(photos_serializer.errors, status=HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
+        if not self.product:
+            raise Http404
         queryset_list = ProductPhoto.active_objects.filter(product=self.product)
         return queryset_list
 

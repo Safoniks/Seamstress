@@ -1,3 +1,5 @@
+from django.http import Http404
+
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
 from rest_framework.generics import (
@@ -41,6 +43,8 @@ class WorkerOperationList(ListCreateAPIView):
     lookup_url_kwarg = 'worker_id'
 
     def get_queryset(self):
+        if not self.worker:
+            raise Http404
         queryset_list = Operation.objects.filter(worker=self.worker)
         return queryset_list
 
@@ -69,6 +73,8 @@ class WorkerOperationDetail(RetrieveDestroyAPIView):
         return Response(status=HTTP_204_NO_CONTENT)
 
     def get_queryset(self):
+        if not self.worker:
+            raise Http404
         queryset_list = Operation.objects.filter(worker=self.worker)
         return queryset_list
 
