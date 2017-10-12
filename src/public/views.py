@@ -226,7 +226,7 @@ class WorkerGoal(GenericAPIView):
             goal_serializer = serializer(worker.goal).data
             return Response(goal_serializer, status=HTTP_200_OK)
         else:
-            raise Http404
+            return Response({'detail': 'Goal has not been added yet.'}, status=HTTP_204_NO_CONTENT)
 
     def post(self, request, *args, **kwargs):
         data = request.data
