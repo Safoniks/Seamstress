@@ -6,6 +6,7 @@ from rest_framework.generics import (
     GenericAPIView,
 )
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_400_BAD_REQUEST,
@@ -19,7 +20,7 @@ from operation.models import Operation
 from public.models import WorkerTiming
 from user.permissions import IsAuthenticatedWorker
 from .permissions import IsActiveWorker, IsNotActiveWorker
-from worker.models import WorkerOperation
+from worker.models import WorkerOperation, Worker
 from .serializers import (
     PublicOperationListSerializer,
     PublicOperationDoneSerializer,
@@ -28,7 +29,14 @@ from .serializers import (
     TimerDetailSerializer,
     RatingDurationDailySerializer,
     WorkerGoalSerializer,
+    WorkerPublicListSerializer,
 )
+
+
+class PublicWorkerList(ListAPIView):
+    queryset = Worker.objects.all()
+    serializer_class = WorkerPublicListSerializer
+    permission_classes = [AllowAny]
 
 
 class PublicWorkerDetail(GenericAPIView):
@@ -170,22 +178,22 @@ class StopTimer(APIView):
         return self.request.user.worker
 
 
-class ResetTimer(APIView):
-    # authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = [IsAuthenticatedWorker, IsNotActiveWorker]
-
-    def post(self, request, *args, **kwargs):
-        worker = self.worker
-        if not worker.is_last_timing_reset:
-            worker.timer_do(WorkerTiming.RESET)
-            return Response(status=HTTP_200_OK)
-        return Response(data={
-            'detail': "Already reset."
-        }, status=HTTP_400_BAD_REQUEST)
-
-    @property
-    def worker(self):
-        return self.request.user.worker
+# class ResetTimer(APIView):
+#     # authentication_classes = (JSONWebTokenAuthentication,)
+#     permission_classes = [IsAuthenticatedWorker, IsNotActiveWorker]
+#
+#     def post(self, request, *args, **kwargs):
+#         worker = self.worker
+#         if not worker.is_last_timing_reset:
+#             worker.timer_do(WorkerTiming.RESET)
+#             return Response(status=HTTP_200_OK)
+#         return Response(data={
+#             'detail': "Already reset."
+#         }, status=HTTP_400_BAD_REQUEST)
+#
+#     @property
+#     def worker(self):
+#         return self.request.user.worker
 
 
 class RatingDurationDaily(GenericAPIView):

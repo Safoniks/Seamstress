@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
@@ -16,6 +17,29 @@ class MyDateTimeField(serializers.DateTimeField):
     def to_representation(self, value):
         value = timezone.localtime(value)
         return super(MyDateTimeField, self).to_representation(value)
+
+
+class WorkerPublicListSerializer(serializers.ModelSerializer):
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Worker
+        fields = (
+            'first_name',
+            'last_name',
+            'username',
+        )
+
+    def get_first_name(self, obj):
+        return obj.user.first_name
+
+    def get_last_name(self, obj):
+        return obj.user.last_name
+
+    def get_username(self, obj):
+        return obj.user.username
 
 
 class WorkerGoalSerializer(serializers.ModelSerializer):

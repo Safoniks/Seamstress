@@ -1,5 +1,5 @@
 *.sock
-logs/
+data/logs/
 .idea/
 tmp/
 static/
@@ -104,5 +104,5 @@ ENV/
 
 # Rope project settings
 .ropeproject
-media/
+data/media/
 /dump.rdb

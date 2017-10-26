@@ -1,6 +1,6 @@
 data/
-media/
-logs/
+data/media/
+data/logs/
 tmp/
 static/
 src/seamstress/settings/local.py

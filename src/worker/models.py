@@ -174,7 +174,9 @@ class Worker(models.Model):
 
     @property
     def is_last_timing_reset(self):
-        return self.timings.last().action == WorkerTiming.RESET
+        if self.timings:
+            return self.timings.last().action == WorkerTiming.RESET
+        return True
 
     @property
     def last_reset(self):

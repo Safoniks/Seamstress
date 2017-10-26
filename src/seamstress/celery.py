@@ -13,8 +13,12 @@ celery.config_from_object('django.conf:settings')
 celery.autodiscover_tasks(settings.INSTALLED_APPS)
 
 celery.conf.beat_schedule = {
-    'clear-photos-every-single-minute': {
+    'clear-photos-every-midnight': {
         'task': 'product.tasks.clear_photos',
         'schedule': crontab(minute=0, hour=0),
+    },
+    'reset-daily-timing-every-midnight': {
+        'task': 'public.tasks.reset_daily_timing',
+        'schedule': crontab(minute=0, hour='*/1'),
     },
 }

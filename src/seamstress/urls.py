@@ -26,6 +26,7 @@ def api_root(request, format=None):
         'operation-types': reverse('core:operation-type-list', request=request, format=format),
         'operation-type-categories': reverse('core:operation-type-category-list', request=request, format=format),
         'workers': reverse('core:worker-list', request=request, format=format),
+        'public-workers': reverse('public:worker-list', request=request, format=format),
         'brigades': reverse('core:brigade-list', request=request, format=format),
 
         'public-worker': reverse('public:worker-detail', request=request, format=format),
@@ -36,7 +37,7 @@ def api_root(request, format=None):
         'timer': reverse('public:timer-detail', request=request, format=format),
         'start-timer': reverse('public:start-timer', request=request, format=format),
         'stop-timer': reverse('public:stop-timer', request=request, format=format),
-        'reset-timer': reverse('public:reset-timer', request=request, format=format),
+        # 'reset-timer': reverse('public:reset-timer', request=request, format=format),
     })
 
 

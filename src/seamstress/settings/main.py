@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'public.apps.PublicConfig',
 ]
 
+CELERY_IMPORTS = ('product.tasks', 'public.tasks')
+
 
 JWT_AUTH = {
     'JWT_ENCODE_HANDLER': 'rest_framework_jwt.utils.jwt_encode_handler',
@@ -116,7 +118,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.IsAdminUser',
     ),
-    'PAGE_SIZE': 20
+    'PAGE_SIZE': 50
 }
 
 

@@ -6,6 +6,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 from . import views
 
 urlpatterns = format_suffix_patterns([
+    url(r'^worker-list/$', views.PublicWorkerList.as_view(), name='worker-list'),
     url(r'^worker/$', views.PublicWorkerDetail.as_view(), name='worker-detail'),
     url(r'^worker/goal/$', views.WorkerGoal.as_view(), name='worker-goal'),
     url(r'^worker/rating/$', views.RatingDurationDaily.as_view(), name='worker-rating'),
@@ -15,7 +16,7 @@ urlpatterns = format_suffix_patterns([
     url(r'^worker/timer/$', views.TimerDetail.as_view(), name='timer-detail'),
     url(r'^worker/timer/start/$', views.StartTimer.as_view(), name='start-timer'),
     url(r'^worker/timer/stop/$', views.StopTimer.as_view(), name='stop-timer'),
-    url(r'^worker/timer/reset/$', views.ResetTimer.as_view(), name='reset-timer'),
+    # url(r'^worker/timer/reset/$', views.ResetTimer.as_view(), name='reset-timer'),
     url(r'^login/$', obtain_jwt_token, name='login-worker'),
 ])
 
