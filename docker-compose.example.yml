@@ -22,13 +22,14 @@ services:
     build: .
     environment:
       - APP_MODE=celery
+      - PGPASSWORD=seamstress
     volumes:
       - ./src/seamstress/settings/local.docker.py:/app/src/seamstress/settings/local.py:ro
       - ./data/app:/app/data
     networks:
     - seamstress_net
     healthcheck:
-      test: ["CMD", "PGPASSWORD=\"seamstress\"", "psql", "-h", "postgresql", "-U", "seamstress", "-c", "\"\\l\""]
+      test: "psql -h postgres_db -U seamstress -d seamstress_db -c \"\\l\""
       interval: 30s
       timeout: 10s
       retries: 5
@@ -37,6 +38,7 @@ services:
     build: .
     environment:
       - APP_MODE=web
+      - PGPASSWORD=seamstress
     volumes:
       - ./src/seamstress/settings/local.docker.py:/app/src/seamstress/settings/local.py:ro
       - ./data/app:/app/data
@@ -45,7 +47,7 @@ services:
     networks:
     - seamstress_net
     healthcheck:
-      test: ["CMD", "PGPASSWORD=\"seamstress\"", "psql", "-h", "postgresql", "-U", "seamstress", "-c", "\"\\l\""]
+      test: "psql -h postgres_db -U seamstress -d seamstress_db -c \"\\l\""
       interval: 30s
       timeout: 10s
       retries: 5

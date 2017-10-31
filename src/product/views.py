@@ -10,6 +10,8 @@ from rest_framework.generics import (
 )
 
 from .models import Product, ProductPhoto
+from operationtypecategory.models import OperationTypeCategory
+from operationtypecategory.serializers import OperationTypeCategorySerializer
 from .serializers import (
     ProductSerializer,
     ProductPhotoSerializer,
@@ -34,6 +36,14 @@ class ProductList(ListCreateAPIView):
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    def get(self, request, *args, **kwargs):
+        categories = OperationTypeCategory.objects.all()
+        categories = OperationTypeCategorySerializer(categories, many=True).data
+
+        response = super(ProductList, self).get(request, *args, **kwargs)
+        response.data['categories'] = categories
+        return response
 
     def create(self, request, *args, **kwargs):
         data = request.data
@@ -82,6 +92,12 @@ class ProductList(ListCreateAPIView):
         if is_valid:
             product_email_message = ProductEmailMessage(request, product)
             send_product_mail.delay(*product_email_message.args_mail)
+
+            categories = OperationTypeCategory.objects.all()
+            categories = OperationTypeCategorySerializer(categories, many=True).data
+            setattr(serialized_product, 'categories', serialized_product)
+
+
             return Response(serialized_product, status=HTTP_201_CREATED)
         else:
             product and product.delete()
