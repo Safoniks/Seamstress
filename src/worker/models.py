@@ -100,7 +100,7 @@ class Goal(models.Model):
         # print('prediction hours', salary_seconds/60/60)
         prediction = round(self.tempo * salary_seconds, 2)
         self.prediction_save = prediction
-        self.save()
+        self.save_base()
         return prediction
 
 
