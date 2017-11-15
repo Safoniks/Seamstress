@@ -41,6 +41,7 @@ class WorkerOperation(models.Model):
 class Goal(models.Model):
     name = models.CharField(max_length=100, blank=True, default='')
     amount = models.FloatField()
+    prediction_save = models.FloatField(blank=True, default=0)
     start = models.DateTimeField(blank=True)
     end = models.DateTimeField(blank=True)
 
@@ -74,6 +75,8 @@ class Goal(models.Model):
 
     @property
     def prediction(self):
+        if not self.is_active:
+            return self.prediction_save
         current_day = timezone.now().day
         salary_seconds = self.default_salary_timedelta.total_seconds()
         daily_norm_seconds = timedelta(hours=settings.APPLICATION_SETTINGS['working_hours']).total_seconds()
@@ -95,7 +98,10 @@ class Goal(models.Model):
                 salary_seconds += abnormality
 
         # print('prediction hours', salary_seconds/60/60)
-        return round(self.tempo * salary_seconds, 2)
+        prediction = round(self.tempo * salary_seconds, 2)
+        self.prediction_save = prediction
+        self.save()
+        return prediction
 
 
 class WorkerManager(models.Manager):
