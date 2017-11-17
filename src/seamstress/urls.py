@@ -1,4 +1,5 @@
 from django.conf.urls import url, include
+from django.conf import settings
 from django.contrib import admin
 
 from rest_framework.decorators import api_view
@@ -66,3 +67,10 @@ urlpatterns = [
     url(r'^api/v1/core/', include(core_urlpatterns, namespace='core')),
     url(r'^api/v1/public/', include('public.urls', namespace='public')),
 ]
+
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

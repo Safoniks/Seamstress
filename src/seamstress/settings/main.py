@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'simple_history',
+    'debug_toolbar',
     'rest_framework',
     'rest_framework_swagger',
 
@@ -53,6 +54,7 @@ JWT_AUTH = {
 
 MIDDLEWARE = [
     'simple_history.middleware.HistoryRequestMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

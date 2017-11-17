@@ -233,29 +233,57 @@ class Worker(models.Model):
         return self.get_done_in_interval(**self.interval.get('ALL_TIME'), field='cost')
 
     def get_time_worked_in_interval(self, since, until, with_pause=False):
+        """
+
+        """
         time_worked = timedelta()
-        timings = self.timings.filter(date__gt=since, date__lt=until)
+        # Всі таймінги в цьому проміжку
+        all_timings = self.timings
+        timings = all_timings.filter(date__gt=since, date__lt=until)
 
         if timings:
+            # Стоп таймінги в цьому проміжку
             stop_timings = timings.filter(action=WorkerTiming.STOP)
+            # Старт таймінги в цьому проміжку
             start_timings = timings.filter(action=WorkerTiming.START)
 
+            # Перший таймінг в цьому проміжку
             first_timer = timings.first()
+            # Останній таймінг в цьому проміжку
             last_timer = timings.last()
+            # Чи останній ресет в цьому проміжку
             last_is_reset = last_timer.action == WorkerTiming.RESET
+            # Чи перший стоп в цьому проміжку
             first_is_stop = first_timer.action == WorkerTiming.STOP
+            # Чи перший старт в цьому проміжку
             first_is_start = first_timer.action == WorkerTiming.START
+            # Чи останній старт в цьому проміжку
             last_is_start = last_timer.action == WorkerTiming.START
 
             if with_pause:
+                # Якщо є старти в проміжку, беремо весь час в проміжку і віднімаємо(
+                # 1. час до старта якщо він перший,
+                # 2. час від стопа до старта,
+                # 3. якщо останній ресет, то час після нього)
+                #
+                # І в любому випадку
+                # 1. Якщо перший не старт, то додаємо час до першого таймінгу(тобто до першого таймінгу йде старт)
+                # 2. Якщо останній не ресет, то віднімаємо
                 if start_timings.exists():
+                    # Весь час у проміжку
                     time_worked = until - since
+                    # Шукаємо всі старти які йдуть після ресета(тобто перший старт за день)
                     for start_timing in start_timings:
-                        if start_timing.is_prev_reset:
+
+                        if start_timing.is_prev_reset(worker_timings=all_timings):
+
+                            # якщо він є перший таймінгом, то просто віднімаємо час до нього, інакше віднімаємо час
+                            # до попереднього стопа(тобто час коли він був в паузі)
                             if start_timing == first_timer:
                                 time_worked -= start_timing.date - since
                             else:
-                                time_worked -= start_timing.get_delta(with_reset=True)
+                                time_worked -= start_timing.get_delta(worker_timings=all_timings, with_reset=True)
+                    # Якщо останній ресет, то просто віднімаємо час після ресету
                     if last_is_reset:
                         time_worked -= until - last_timer.date
                 if not first_is_start:
@@ -270,16 +298,18 @@ class Worker(models.Model):
                         if first_is_start:
                             start_timings = start_timings[1:]
                         for start_timing in start_timings:
-                            time_worked -= start_timing.get_delta()
+                            time_worked -= start_timing.get_delta(worker_timings=all_timings)
                     else:
                         if first_is_stop:
                             stop_timings = stop_timings[1:]
                         for stop in stop_timings:
-                            time_worked += stop.get_delta()
+                            time_worked += stop.get_delta(worker_timings=all_timings)
                 if not first_is_start:
                     time_worked += first_timer.date - since
         else:
+            # Якщо в цьому проміжку немає таймінгів, то шукаємо останній таймінг перед цим проміжком
             last_timing_before = self.timings.filter(date__lt=until).last()
+            # Якщо останній таймінг перед проміжком існує і це старт, то відпрацьований час буде весь цей проміжок
             if last_timing_before and last_timing_before.action == WorkerTiming.START:
                 time_worked = until - since
 
