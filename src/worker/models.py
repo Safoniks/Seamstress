@@ -226,12 +226,15 @@ class Worker(models.Model):
         timings = self.timings.filter(
             Q(start_date__gt=since, start_date__lt=until) | Q(stop_date__gt=since, stop_date__lt=until)
         )
+        first_timing = timings.first()
+        last_timing = timings.last()
+
         if not timings.exists():
+            if self.is_active:
+                time_worked = until - since
             return time_worked
 
         if with_pause:
-            first_timing = timings.first()
-            last_timing = timings.last()
             start_point = since if first_timing.start_date < since else first_timing.start_date
             end_point = until if not last_timing.stop_date or last_timing.stop_date > until else last_timing.stop_date
             time_worked = end_point - start_point
