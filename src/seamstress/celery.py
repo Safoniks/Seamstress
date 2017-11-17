@@ -17,8 +17,4 @@ celery.conf.beat_schedule = {
         'task': 'product.tasks.clear_photos',
         'schedule': crontab(minute=0, hour=0),
     },
-    'reset-daily-timing-every-midnight': {
-        'task': 'public.tasks.reset_daily_timing',
-        'schedule': crontab(minute=0, hour='*/1'),
-    },
 }

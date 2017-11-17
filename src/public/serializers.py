@@ -134,20 +134,17 @@ class PublicOperationDoneSerializer(serializers.Serializer):
 
 
 class TimerDetailSerializer(serializers.ModelSerializer):
-    time_worked = serializers.DurationField(source='last_reset_time_worked')
-    last_reset = MyDateTimeField()
+    time_worked = serializers.DurationField(source='daily_time_worked')
 
     class Meta:
         model = Worker
         fields = (
             'is_active',
             'time_worked',
-            'last_reset',
         )
         read_only_fields = (
             'is_active',
             'time_worked',
-            'last_reset',
         )
 
 
@@ -185,7 +182,7 @@ class PublicWorkerDetailSerializer(serializers.ModelSerializer):
         return obj.brigade_name
 
     def get_daily_salary(self, obj):
-        return obj.last_reset_salary
+        return obj.daily_salary
 
     def get_last_period_salary(self, obj):
         return obj.last_period_salary_with_debt

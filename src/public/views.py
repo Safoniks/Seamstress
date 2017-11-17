@@ -157,7 +157,7 @@ class StartTimer(APIView):
     permission_classes = [IsAuthenticatedWorker, IsNotActiveWorker]
 
     def post(self, request, *args, **kwargs):
-        self.worker.timer_do(WorkerTiming.START)
+        self.worker.timer_start()
         return Response(status=HTTP_200_OK)
 
     @property
@@ -170,30 +170,12 @@ class StopTimer(APIView):
     permission_classes = [IsAuthenticatedWorker, IsActiveWorker]
 
     def post(self, request, *args, **kwargs):
-        self.worker.timer_do(WorkerTiming.STOP)
+        self.worker.timer_stop()
         return Response(status=HTTP_200_OK)
 
     @property
     def worker(self):
         return self.request.user.worker
-
-
-# class ResetTimer(APIView):
-#     # authentication_classes = (JSONWebTokenAuthentication,)
-#     permission_classes = [IsAuthenticatedWorker, IsNotActiveWorker]
-#
-#     def post(self, request, *args, **kwargs):
-#         worker = self.worker
-#         if not worker.is_last_timing_reset:
-#             worker.timer_do(WorkerTiming.RESET)
-#             return Response(status=HTTP_200_OK)
-#         return Response(data={
-#             'detail': "Already reset."
-#         }, status=HTTP_400_BAD_REQUEST)
-#
-#     @property
-#     def worker(self):
-#         return self.request.user.worker
 
 
 class RatingDurationDaily(GenericAPIView):

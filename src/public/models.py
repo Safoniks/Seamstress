@@ -1,4 +1,5 @@
 from datetime import timedelta
+from django.utils import timezone
 
 from django.db import models
 
@@ -24,56 +25,20 @@ class WorkerOperationLogs(models.Model):
 
 
 class WorkerTiming(models.Model):
-    START = 'start'
-    STOP = 'stop'
-    RESET = 'reset'
-
-    ACTION_CHOICES = (
-        (START, START),
-        (STOP, STOP),
-        (RESET, RESET),
-    )
-
     worker = models.ForeignKey('worker.Worker')
-    action = models.CharField(max_length=5, choices=ACTION_CHOICES)
-    date = models.DateTimeField(auto_now_add=True)
+    start_date = models.DateTimeField()
+    stop_date = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         db_table = 'worker_timing'
         verbose_name = 'worker timing'
         verbose_name_plural = 'worker timings'
-        ordering = ['-date']
 
-    def get_next(self, queryset):
-        next = queryset.filter(date__gt=self.date).order_by('date')
-        next = next.first()
-        return next if next else False
-
-    def get_prev(self, queryset):
-        prev = queryset.filter(date__lt=self.date)
-        prev = prev.first()
-        return prev if prev else False
-
-    def get_delta(self, worker_timings=None, with_reset=False):
-        current_time = self.date
-        worker_timings = worker_timings if worker_timings else self.worker.timings
-        try:
-            prev_timing = self
-            while True:
-                prev_timing = prev_timing.get_prev(queryset=worker_timings)
-                if with_reset or prev_timing.action != self.RESET:
-                    break
-        except AttributeError:
-            prev_timing = None
-        return current_time - prev_timing.date if prev_timing else timedelta()
-
-    def is_prev_reset(self, worker_timings=None):
-        worker_timings = worker_timings if worker_timings else self.worker.timings
-        try:
-            prev_timing = self.get_prev(queryset=worker_timings).action
-        except AttributeError:
-            return True
-        return prev_timing == self.RESET
+    @property
+    def delta(self):
+        if not self.stop_date:
+            return timezone.now() - self.start_date
+        return self.stop_date - self.start_date
 
 
 class Payroll(models.Model):
